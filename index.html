@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111111">
+<link rel="manifest" href="manifest.webmanifest">
+<title>MatePad Desk</title>
+<style>
+body{margin:0;background:#0e0f12;color:#f4f6f8;font-family:Arial,sans-serif}
+main{max-width:1100px;margin:auto;padding:24px}
+.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
+#clock{font-size:84px;font-weight:700;line-height:1}
+#date,.muted{color:#a9b0ba}
+.card{background:#17191f;border:1px solid #30343d;border-radius:24px;padding:22px;margin-top:20px}
+.player{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:center}
+#cover{width:100%;aspect-ratio:1;object-fit:cover;border-radius:18px;background:#222}
+h1{font-size:40px;margin:6px 0}
+button{background:#242832;color:white;border:0;border-radius:14px;padding:14px 18px;font-size:16px;margin-right:8px;margin-top:8px}
+.primary{background:#1db954;color:#06140b}
+.bar{height:8px;background:#292d35;border-radius:99px;overflow:hidden;margin-top:18px}
+#fill{height:100%;width:0;background:#1db954}
+.times{display:flex;justify-content:space-between;color:#a9b0ba;font-size:12px;margin-top:6px}
+.hidden{display:none}
+@media(max-width:720px){.player{grid-template-columns:1fr}#clock{font-size:60px}}
+</style>
+</head>
+<body>
+<main>
+<div class="top">
+  <div><div id="clock">--:--</div><div id="date" class="muted">—</div></div>
+  <div id="state" class="muted">Spotify desconectado</div>
+</div>
+
+<section class="card" id="login">
+  <div class="muted">SPOTIFY</div>
+  <h1>Conecta tu cuenta</h1>
+  <p class="muted">Usa OAuth con PKCE. No necesita Client Secret.</p>
+  <button id="loginBtn" class="primary">Conectar Spotify</button>
+</section>
+
+<section class="card player hidden" id="player">
+  <img id="cover" alt="Portada">
+  <div>
+    <div class="muted">AHORA SUENA</div>
+    <h1 id="track">Sin reproducción activa</h1>
+    <div id="artist" class="muted">—</div>
+    <div id="device" class="muted" style="margin-top:10px">—</div>
+    <div class="bar"><div id="fill"></div></div>
+    <div class="times"><span id="pos">0:00</span><span id="dur">0:00</span></div>
+    <div style="margin-top:18px">
+      <button id="prev">◀</button>
+      <button id="play" class="primary">▶</button>
+      <button id="next">▶</button>
+      <button id="refresh">Actualizar</button>
+      <button id="logout">Desconectar</button>
+    </div>
+  </div>
+</section>
+
+<script>
+const CLIENT_ID="1ccc4c7c8c7c48f9a425ed5b892ad203";
+const REDIRECT_URI=location.origin+location.pathname;
+const SCOPES="user-read-currently-playing user-read-playback-state user-modify-playback-state";
+const $=id=>document.getElementById(id);
+let token=sessionStorage.sp_access_token||"", refresh=sessionStorage.sp_refresh_token||"";
+let expires=Number(sessionStorage.sp_expires_at||0), isPlaying=false, timer=null;
+
+function clock(){
+ const n=new Date();
+ $("clock").textContent=n.toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit",hour12:false});
+ $("date").textContent=n.toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+}
+clock(); setInterval(clock,1000);
+
+function b64(b){return btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
+function verifier(){let a=new Uint8Array(64);crypto.getRandomValues(a);return b64(a)}
+async function challenge(v){return b64(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(v)))}
+
+async function login(){
+ const v=verifier();sessionStorage.sp_verifier=v;
+ const c=await challenge(v);
+ const q=new URLSearchParams({client_id:CLIENT_ID,response_type:"code",redirect_uri:REDIRECT_URI,scope:SCOPES,code_challenge_method:"S256",code_challenge:c});
+ location.href="https://accounts.spotify.com/authorize?"+q;
+}
+
+function saveTokens(d){
+ token=d.access_token; if(d.refresh_token) refresh=d.refresh_token;
+ expires=Date.now()+(d.expires_in-60)*1000;
+ sessionStorage.sp_access_token=token;sessionStorage.sp_refresh_token=refresh;sessionStorage.sp_expires_at=expires;
+}
+
+async function exchange(code){
+ const body=new URLSearchParams({client_id:CLIENT_ID,grant_type:"authorization_code",code,redirect_uri:REDIRECT_URI,code_verifier:sessionStorage.sp_verifier});
+ const r=await fetch("https://accounts.spotify.com/api/token",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body});
+ if(!r.ok) throw new Error("auth");
+ saveTokens(await r.json());
+ history.replaceState({},"",REDIRECT_URI);
+}
+
+async function refreshToken(){
+ if(!refresh) return false;
+ const body=new URLSearchParams({client_id:CLIENT_ID,grant_type:"refresh_token",refresh_token:refresh});
+ const r=await fetch("https://accounts.spotify.com/api/token",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body});
+ if(!r.ok) return false;
+ saveTokens(await r.json()); return true;
+}
+
+async function api(path,opt={}){
+ if(Date.now()>=expires && !(await refreshToken())) throw new Error("expired");
+ const headers=Object.assign({},opt.headers||{},{Authorization:"Bearer "+token});
+ return fetch("https://api.spotify.com/v1"+path,Object.assign({},opt,{headers}));
+}
+
+function fmt(ms){let s=Math.floor((ms||0)/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+
+async function load(){
+ const r=await api("/me/player");
+ if(r.status===204){$("track").textContent="Sin reproducción activa";$("artist").textContent="—";$("device").textContent="Abre Spotify en otro dispositivo";return}
+ if(!r.ok) return;
+ const d=await r.json(); isPlaying=!!d.is_playing; const t=d.item;
+ if(!t)return;
+ $("track").textContent=t.name||"Sin título";
+ $("artist").textContent=(t.artists||[]).map(x=>x.name).join(", ");
+ $("cover").src=t.album?.images?.[0]?.url||"";
+ $("device").textContent=d.device?.name?"Reproduciendo en: "+d.device.name:"";
+ $("fill").style.width=(t.duration_ms?Math.min(100,(d.progress_ms/t.duration_ms)*100):0)+"%";
+ $("pos").textContent=fmt(d.progress_ms); $("dur").textContent=fmt(t.duration_ms);
+ $("play").textContent=isPlaying?"⏸":"▶";
+}
+
+async function control(path,method="POST"){await api(path,{method});setTimeout(load,300)}
+function show(){
+ $("login").classList.add("hidden");$("player").classList.remove("hidden");$("state").textContent="Spotify conectado";
+ if(timer)clearInterval(timer);load();timer=setInterval(load,5000);
+}
+function logout(){
+ sessionStorage.clear();token=refresh="";if(timer)clearInterval(timer);
+ $("player").classList.add("hidden");$("login").classList.remove("hidden");$("state").textContent="Spotify desconectado";
+}
+
+$("loginBtn").onclick=login;$("refresh").onclick=load;$("logout").onclick=logout;
+$("prev").onclick=()=>control("/me/player/previous");
+$("next").onclick=()=>control("/me/player/next");
+$("play").onclick=()=>control("/me/player/"+(isPlaying?"pause":"play"),"PUT");
+
+(async()=>{
+ const code=new URLSearchParams(location.search).get("code");
+ if(code){await exchange(code);show()} else if(token&&refresh) show();
+})();
+
+if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script>
+</main>
+</body>
+</html>
