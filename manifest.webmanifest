@@ -2,11 +2,11 @@
   "id": "./",
   "name": "MatePad Desk",
   "short_name": "MatePad Desk",
-  "description": "MatePad Desk con Spotify híbrido, Morning Brief y tráfico Google Routes cada 15 min.",
+  "description": "MatePad Desk con Morning Brief ejecutivo, Spotify mejorado, tráfico, clima y pendientes.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "landscape",
+  "orientation": "any",
   "background_color": "#0e0f12",
   "theme_color": "#0e0f12",
   "icons": [

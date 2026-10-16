@@ -301,6 +301,269 @@ main{max-width:1360px;padding:10px 14px}
 }
 #musicVisual{min-height:315px}
 
+
+/* V17 · Responsive orientation */
+@media (orientation: landscape) {
+  main{max-width:1360px}
+  .grid{grid-template-columns:minmax(0,1.08fr) minmax(390px,.92fr)}
+  .spotify{grid-template-columns:minmax(250px,.88fr) minmax(0,1.12fr)}
+  .compact-side{grid-template-columns:1fr}
+}
+
+@media (orientation: portrait) {
+  main{
+    max-width:900px;
+    padding:10px 12px 14px;
+  }
+
+  .compact-top{
+    min-height:44px;
+    align-items:center;
+  }
+
+  .clock-inline{
+    gap:10px;
+  }
+
+  #clock{
+    font-size:31px!important;
+  }
+
+  #date{
+    font-size:12px!important;
+  }
+
+  .status{
+    font-size:10px;
+    padding:6px 9px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+    gap:9px;
+    margin-top:7px;
+  }
+
+  .left-stack{
+    gap:9px;
+  }
+
+  .spotify-card{
+    padding:10px;
+  }
+
+  .spotify{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .visual-shell,
+  #musicVisual{
+    min-height:260px;
+    max-height:320px;
+  }
+
+  .spotify-info{
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    align-content:start;
+  }
+
+  .track-row{
+    grid-template-columns:44px minmax(0,1fr);
+  }
+
+  .cover-thumb{
+    width:44px!important;
+    height:44px!important;
+  }
+
+  .spotify-info h1{
+    font-size:21px;
+  }
+
+  .artist{
+    font-size:13px;
+  }
+
+  .device{
+    font-size:10px;
+    margin-top:5px;
+  }
+
+  .bar{
+    margin-top:8px;
+  }
+
+  .compact-controls{
+    margin-top:7px;
+  }
+
+  .compact-controls button{
+    padding:7px 9px;
+    font-size:11px;
+  }
+
+  .context-card{
+    padding:10px 12px;
+  }
+
+  .context-title{
+    font-size:15px;
+  }
+
+  .brief-grid,
+  .traffic-grid{
+    grid-template-columns:minmax(0,1fr) minmax(250px,.85fr);
+    gap:9px;
+    margin-top:8px;
+  }
+
+  .brief-headline{
+    font-size:16px;
+  }
+
+  .brief-detail,
+  .traffic-status{
+    font-size:10px;
+  }
+
+  .traffic-duration{
+    font-size:32px;
+  }
+
+  .compact-side{
+    display:grid;
+    grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);
+    gap:9px;
+    padding:9px;
+  }
+
+  .weather-block,
+  .pending-block{
+    min-width:0;
+  }
+
+  .config-details{
+    grid-column:1 / -1;
+  }
+
+  .panel-block{
+    padding:10px;
+  }
+
+  .mini-title{
+    font-size:14px;
+  }
+
+  .compact-weather .temp{
+    font-size:34px;
+  }
+
+  .compact-weather .condition{
+    font-size:11px;
+  }
+
+  .compact-metrics{
+    grid-template-columns:1fr 1fr;
+    gap:5px;
+    margin-top:7px;
+  }
+
+  .compact-metrics .metric{
+    padding:7px 8px;
+  }
+
+  .compact-metrics .metric .v{
+    font-size:13px;
+  }
+
+  .compact-summary{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:5px;
+    margin-top:7px;
+  }
+
+  .compact-summary .pending-kpi{
+    padding:6px 7px;
+  }
+
+  .compact-summary .pending-kpi .n{
+    font-size:16px;
+  }
+
+  .compact-pending-list{
+    gap:4px;
+    margin-top:7px;
+  }
+
+  .compact-pending-list .pending-item{
+    padding:6px 8px;
+  }
+
+  .compact-pending-list .pending-name{
+    font-size:11px;
+  }
+
+  .compact-pending-list .pending-meta{
+    font-size:8.5px;
+    margin-top:3px;
+  }
+
+  .pending-more-btn{
+    min-height:28px;
+    padding:5px 9px;
+    font-size:9px;
+  }
+
+  .config-details summary{
+    padding:8px 0;
+  }
+}
+
+@media (orientation: portrait) and (max-width:620px) {
+  .compact-side{
+    grid-template-columns:1fr;
+  }
+
+  .config-details{
+    grid-column:auto;
+  }
+
+  .brief-grid,
+  .traffic-grid{
+    grid-template-columns:1fr;
+  }
+
+  .visual-shell,
+  #musicVisual{
+    min-height:220px;
+  }
+}
+
+
+/* V18 · Executive brief + Spotify control hierarchy */
+.spotify-actions{display:grid;gap:7px;margin-top:8px}
+.spotify-utility-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.spotify-utility-row button{min-height:32px;padding:6px 10px;font-size:10.5px;border-radius:10px}
+.spotify-transport-row{display:grid!important;grid-template-columns:1fr 1.35fr 1fr;gap:8px;margin-top:0!important}
+.spotify-transport-row button{min-height:48px!important;padding:8px 10px!important;font-size:19px!important;border-radius:13px!important}
+.spotify-transport-row #playBtn{font-size:23px!important}
+.exec-brief{margin-top:9px}
+.market-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.market-item{background:var(--panel2);border-radius:12px;padding:9px 10px;min-width:0}
+.market-item span{display:block;font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.market-item strong{display:block;margin-top:3px;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.market-item em{display:block;margin-top:2px;font-style:normal;font-size:10px;color:var(--muted)}
+.brief-lower{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:7px;margin-top:7px}
+.agenda-card,.signal-card{background:var(--panel2);border-radius:12px;padding:9px 10px;min-width:0}
+.agenda-time{font-size:21px;font-weight:780;line-height:1;margin-top:5px}
+.agenda-title{font-size:13px;font-weight:700;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.signal-text{font-size:14px;font-weight:720;line-height:1.25;margin-top:5px}
+.market-up{color:#ff9d9d!important}.market-down{color:#8ed6a5!important}.market-flat{color:var(--muted)!important}
+@media (orientation:portrait){.market-strip{grid-template-columns:repeat(3,minmax(0,1fr))}.brief-lower{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.market-strip{grid-template-columns:1fr}.brief-lower{grid-template-columns:1fr}.spotify-transport-row button{min-height:46px!important}}
+
 </style>
 </head>
 <body>
@@ -346,12 +609,16 @@ main{max-width:1360px;padding:10px 14px}
           <div class="bar"><div id="fill"></div></div>
           <div class="times"><span id="pos">0:00</span><span id="dur">0:00</span></div>
 
-          <div class="controls compact-controls">
-            <button id="prevBtn" aria-label="Anterior">◀</button>
-            <button id="playBtn" class="primary" aria-label="Reproducir o pausar">▶</button>
-            <button id="nextBtn" aria-label="Siguiente">▶</button>
-            <button id="refreshBtn" class="secondary">Actualizar</button>
-            <button id="logoutBtn" class="secondary">Desconectar</button>
+          <div class="spotify-actions">
+            <div class="spotify-utility-row">
+              <button id="refreshBtn" class="secondary">Actualizar</button>
+              <button id="logoutBtn" class="secondary">Desconectar</button>
+            </div>
+            <div class="controls compact-controls spotify-transport-row">
+              <button id="prevBtn" aria-label="Anterior">◀</button>
+              <button id="playBtn" class="primary" aria-label="Reproducir o pausar">▶</button>
+              <button id="nextBtn" aria-label="Siguiente">▶</button>
+            </div>
           </div>
         </div>
       </div>
@@ -362,19 +629,29 @@ main{max-width:1360px;padding:10px 14px}
         <div class="context-head">
           <div>
             <div class="eyebrow">Morning Brief</div>
-            <div class="context-title">Lo importante para arrancar</div>
+            <div class="context-title">Mercados · Agenda · Señal LMT</div>
           </div>
           <div id="briefStamp" class="context-chip">Antes de 2:00 pm</div>
         </div>
-        <div class="brief-grid">
-          <div class="brief-main">
-            <div id="briefHeadline" class="brief-headline">Preparando resumen…</div>
-            <div id="briefDetail" class="brief-detail">Clima y pendientes se integrarán automáticamente.</div>
+
+        <div class="exec-brief">
+          <div class="market-strip">
+            <div class="market-item"><span>WTI</span><strong id="briefWTI">Sin fuente</strong><em id="briefWTIChange">—</em></div>
+            <div class="market-item"><span>USD/MXN</span><strong id="briefFX">Sin fuente</strong><em id="briefFXChange">—</em></div>
+            <div class="market-item"><span>Diésel / energía</span><strong id="briefDiesel">Sin fuente</strong><em id="briefDieselChange">—</em></div>
           </div>
-          <div class="brief-metrics">
-            <div><span>Clima</span><strong id="briefWeather">—</strong></div>
-            <div><span>Alta prioridad</span><strong id="briefHigh">—</strong></div>
-            <div><span>Vencidos</span><strong id="briefOverdue">—</strong></div>
+          <div class="brief-lower">
+            <div class="agenda-card">
+              <div class="eyebrow">Agenda</div>
+              <div id="briefAgendaTime" class="agenda-time">—</div>
+              <div id="briefAgendaTitle" class="agenda-title">Sin agenda conectada</div>
+              <div id="briefAgendaMeta" class="brief-detail">Conectaremos Google Calendar para mostrar la próxima reunión.</div>
+            </div>
+            <div class="signal-card">
+              <div class="eyebrow">Señal LMT</div>
+              <div id="briefSignal" class="signal-text">Sin fuente de indicadores conectada.</div>
+              <div id="briefSignalMeta" class="brief-detail">Una sola alerta ejecutiva accionable, sin repetir clima ni pendientes.</div>
+            </div>
           </div>
         </div>
       </div>
@@ -509,6 +786,15 @@ main{max-width:1360px;padding:10px 14px}
     </div>
 
     <div class="settings compact-settings">
+      <div class="eyebrow">Morning Brief · fuentes</div>
+      <div class="settings-row" style="margin-top:9px">
+        <input id="briefEndpointInput" autocomplete="off" placeholder="URL del Apps Script del Morning Brief">
+        <button id="briefEndpointSaveBtn" type="button">Guardar</button>
+      </div>
+      <div id="briefConfigMsg" class="note" style="margin-top:9px">Sin fuente conectada. No se mostrarán datos inventados.</div>
+    </div>
+
+    <div class="settings compact-settings">
       <div class="eyebrow">Tráfico · Google Routes</div>
       <div class="settings-row" style="margin-top:9px">
         <input id="trafficEndpointInput" autocomplete="off" placeholder="URL del Apps Script de tráfico (ya configurada)">
@@ -530,6 +816,7 @@ const SCOPES="user-read-currently-playing user-read-playback-state user-modify-p
 const PENDING_ENDPOINT="https://script.google.com/macros/s/AKfycbye1Kb1GRyUHtLZWxGXzv407JLcIroV5fsUTQzUbpJ7hHUk1aRsj3GoIXVIiNel2XilOg/exec?api=matepad";
 const PENDING_REFRESH_MS=5*60*1000;
 const TRAFFIC_REFRESH_MS=15*60*1000;
+const BRIEF_ENDPOINT_KEY="matepad_brief_endpoint";
 const TRAFFIC_ENDPOINT_KEY="matepad_traffic_endpoint";
 const TRAFFIC_DEFAULT_ENDPOINT="https://script.google.com/macros/s/AKfycbytGXbRyMDpsj-fYzWTVQiy-J34wcWrAJdpOiJTDiKqyCGJyK06HBjp4LKJvW_ch1vdYA/exec";
 const TRAFFIC_ORIGIN_LABEL="LM Transportaciones";
@@ -1553,39 +1840,62 @@ async function loadPending(){
 }
 
 
+function briefEndpoint(){
+  return (localStorage.getItem(BRIEF_ENDPOINT_KEY)||"").trim();
+}
+function setMarketValue(valueId,changeId,item){
+  const value=item?.value ?? "—";
+  const change=item?.change ?? "—";
+  const direction=item?.direction || "flat";
+  $(valueId).textContent=value;
+  $(changeId).textContent=change;
+  $(changeId).className=direction==="up"?"market-up":direction==="down"?"market-down":"market-flat";
+}
+function renderExecutiveBriefData(d){
+  setMarketValue("briefWTI","briefWTIChange",d?.markets?.wti);
+  setMarketValue("briefFX","briefFXChange",d?.markets?.usdmxn);
+  setMarketValue("briefDiesel","briefDieselChange",d?.markets?.diesel);
+  $("briefAgendaTime").textContent=d?.agenda?.time || "—";
+  $("briefAgendaTitle").textContent=d?.agenda?.title || "Sin agenda conectada";
+  $("briefAgendaMeta").textContent=d?.agenda?.meta || "Conectaremos Google Calendar para mostrar la próxima reunión.";
+  $("briefSignal").textContent=d?.signal?.text || "Sin fuente de indicadores conectada.";
+  $("briefSignalMeta").textContent=d?.signal?.meta || "Una sola alerta ejecutiva accionable, sin repetir clima ni pendientes.";
+}
+async function loadExecutiveBrief(){
+  if(isTrafficTime()) return;
+  const endpoint=briefEndpoint();
+  if(!endpoint){renderExecutiveBriefData(null);return;}
+  try{
+    const sep=endpoint.includes("?")?"&":"?";
+    const r=await fetch(endpoint+sep+"api=brief&_="+Date.now(),{cache:"no-store",redirect:"follow"});
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    const d=await r.json();
+    if(!d.ok) throw new Error(d.error||"Respuesta inválida");
+    renderExecutiveBriefData(d);
+  }catch(e){
+    console.error("Morning Brief",e);
+    renderExecutiveBriefData(null);
+    $("briefConfigMsg").textContent="No pude cargar el Morning Brief. Revisa el endpoint.";
+  }
+}
+function loadBriefEndpointSetting(){
+  const endpoint=briefEndpoint();
+  $("briefEndpointInput").value=endpoint;
+  $("briefConfigMsg").textContent=endpoint?"Fuente del Morning Brief configurada.":"Sin fuente conectada. No se mostrarán datos inventados.";
+}
+function saveBriefEndpoint(){
+  const v=$("briefEndpointInput").value.trim();
+  if(!v){localStorage.removeItem(BRIEF_ENDPOINT_KEY);$("briefConfigMsg").textContent="Fuente eliminada.";renderExecutiveBriefData(null);return;}
+  if(!/^https:\/\/script\.google\.com\/macros\/s\//i.test(v)){$("briefConfigMsg").textContent="La URL no parece ser un Web App de Google Apps Script.";return;}
+  localStorage.setItem(BRIEF_ENDPOINT_KEY,v);$("briefConfigMsg").textContent="Fuente guardada.";loadExecutiveBrief();
+}
+
 function isTrafficTime(){
   return new Date().getHours()>=14;
 }
 
 function renderMorningBrief(){
-  const w=lastWeatherSnapshot;
-  const p=lastPendingSummary;
-  $("briefWeather").textContent=w ? `${w.temp}° · ${w.condition}` : "—";
-  $("briefHigh").textContent=p ? p.highPriority : "—";
-  $("briefOverdue").textContent=p ? p.overdue : "—";
-
-  let headline="Día en control";
-  let detail="Sin alertas críticas cargadas todavía.";
-
-  if(p && p.overdue>0){
-    headline=`${p.overdue} pendiente${p.overdue===1?"":"s"} vencido${p.overdue===1?"":"s"} requiere${p.overdue===1?"":"n"} atención`;
-    detail=`Hay ${p.highPriority} de prioridad alta.`;
-  }else if(p && p.highPriority>0){
-    headline=`${p.highPriority} pendiente${p.highPriority===1?"":"s"} de prioridad alta`;
-    detail="No hay vencidos en este momento.";
-  }else if(p){
-    headline=`${p.totalOpen} pendientes abiertos`;
-    detail="Sin vencidos ni alertas de prioridad alta.";
-  }
-
-  if(w){
-    detail += ` Clima: ${w.condition.toLowerCase()}, ${w.temp}°C`;
-    if(Number(w.rain)>=40) detail += ` y ${w.rain}% de probabilidad de lluvia`;
-    detail += ".";
-  }
-
-  $("briefHeadline").textContent=headline;
-  $("briefDetail").textContent=detail;
+  $("briefStamp").textContent="Antes de 2:00 pm";
 }
 
 function trafficEndpoint(){
@@ -1693,6 +2003,7 @@ $("pendingMoreBtn").addEventListener("click",()=>{pendingExpanded=!pendingExpand
 $("visualShell").addEventListener("click",cycleVisualMode);
 $("trafficRefreshBtn").addEventListener("click",loadTraffic);
 $("trafficEndpointSaveBtn").addEventListener("click",saveTrafficEndpoint);
+$("briefEndpointSaveBtn").addEventListener("click",saveBriefEndpoint);
 $("mapsOpenBtn").href=TRAFFIC_MAPS_URL;
 document.addEventListener("visibilitychange",()=>{
   if(!document.hidden && !$("playerPanel").classList.contains("hidden")) restartVisualizer();
@@ -1706,12 +2017,16 @@ document.addEventListener("visibilitychange",()=>{
   loadPending();
   pendingTimer=setInterval(loadPending,PENDING_REFRESH_MS);
 
+  loadBriefEndpointSetting();
+  loadExecutiveBrief();
+
   loadTrafficEndpointSetting();
   renderContextPanel();
   loadTraffic();
   trafficTimer=setInterval(()=>{
     renderContextPanel();
     if(isTrafficTime()) loadTraffic();
+    else loadExecutiveBrief();
   },TRAFFIC_REFRESH_MS);
 
   const params=new URLSearchParams(location.search);
@@ -1743,6 +2058,19 @@ document.addEventListener("visibilitychange",()=>{
 if("serviceWorker" in navigator){
   navigator.serviceWorker.register("./sw.js").catch(()=>{});
 }
+
+function updateOrientationState(){
+  const portrait=window.matchMedia("(orientation: portrait)").matches;
+  document.body.dataset.orientation=portrait?"portrait":"landscape";
+  // Canvas redraws continuously, but restart after rotation to immediately recalc its dimensions.
+  if(typeof restartVisualizer==="function" && !document.getElementById("playerPanel").classList.contains("hidden")){
+    restartVisualizer();
+  }
+}
+window.addEventListener("orientationchange",()=>setTimeout(updateOrientationState,120));
+window.addEventListener("resize",()=>{ clearTimeout(window.__orientationTimer); window.__orientationTimer=setTimeout(updateOrientationState,120); });
+updateOrientationState();
+
 </script>
 </body>
 </html>
