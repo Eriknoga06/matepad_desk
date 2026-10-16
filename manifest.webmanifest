@@ -2,7 +2,7 @@
   "id": "./",
   "name": "MatePad Desk",
   "short_name": "MatePad Desk",
-  "description": "MatePad Desk V21 con mercados directos de internet, disponibilidad PROD, tráfico, clima, pendientes y Spotify.",
+  "description": "MatePad Desk V22 con FIX Banxico directo, Brent vigente, diésel México, IEPS DOF/SIDOF y disponibilidad PROD.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

@@ -641,6 +641,17 @@ main{max-width:1360px;padding:10px 14px}
   opacity:.82;
 }
 
+
+/* V22 · legibilidad disponibilidad */
+.availability-mini-grid span{
+  font-size:7.2px;
+  letter-spacing:.035em;
+}
+.availability-mini-grid>div{
+  padding-left:6px;
+  padding-right:6px;
+}
+
 </style>
 </head>
 <body>
@@ -735,7 +746,7 @@ main{max-width:1360px;padding:10px 14px}
             </div>
           </div>
           <div class="market-source-line">
-            Mercados: internet directo · Croncopia + OpenVan.camp · IEPS: DOF/SIDOF
+            Mercados: Banxico FIX · AmericasOilWatch/UKOilWatch · OpenVan.camp · IEPS DOF/SIDOF
           </div>
           <div class="brief-lower">
             <div class="availability-card">
@@ -924,11 +935,19 @@ const PENDING_REFRESH_MS=5*60*1000;
 const TRAFFIC_REFRESH_MS=15*60*1000;
 const AVAILABILITY_ENDPOINT_KEY="matepad_availability_endpoint";
 const DIRECT_MARKET_REFRESH_MS=30*60*1000;
+const MARKET_MAX_AGE_MS={
+  fx:4*24*60*60*1000,
+  brent:3*24*60*60*1000,
+  diesel:10*24*60*60*1000,
+  ieps:10*24*60*60*1000
+};
 const MARKET_URLS={
-  fx:"https://croncopia.com/api/exchange/MXN.json",
-  brent:"https://croncopia.com/api/energy/brent_crude.json",
+  fxToday:"https://hubfiscal.mx/api/v1/public/fx/today",
+  fxHistory:"https://hubfiscal.mx/api/v1/public/fx/history?days=7",
+  brent:"https://americasoilwatch.com/api/v1/brent",
+  brentFallback:"https://ukoilwatch.com/api/v1/brent",
   fuel:"https://openvan.camp/api/fuel/prices?source=eriknoga06.github.io",
-  sidofSearch:"https://sidof.segob.gob.mx/dof/sidof/buscarNotas/titulo/cuotas%20disminuidas/1/10/fecha/desc"
+  sidofSearch:"https://sidof.segob.gob.mx/dof/sidof/buscarNotas/titulo/cuotas%20disminuidas/1/15/fecha/desc"
 };
 const TRAFFIC_ENDPOINT_KEY="matepad_traffic_endpoint";
 const TRAFFIC_DEFAULT_ENDPOINT="https://script.google.com/macros/s/AKfycbytGXbRyMDpsj-fYzWTVQiy-J34wcWrAJdpOiJTDiKqyCGJyK06HBjp4LKJvW_ch1vdYA/exec";
@@ -1958,17 +1977,43 @@ function availabilityEndpoint(){
 }
 
 
+
 function marketCardSet(valueId,changeId,value,meta,direction){
   $(valueId).textContent=value ?? "Sin dato";
   $(changeId).textContent=meta || "—";
   $(changeId).className=direction==="up"?"market-up":direction==="down"?"market-down":"market-flat";
 }
 
-function ageLabel(iso){
-  if(!iso) return "";
-  const d=new Date(iso);
-  if(Number.isNaN(d.getTime())) return "";
-  return d.toLocaleString("es-MX",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
+function parseDateFlexible(value){
+  if(!value) return null;
+  const d=new Date(value);
+  if(!Number.isNaN(d.getTime())) return d;
+
+  const s=String(value).trim();
+  const m=s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(m){
+    const d2=new Date(Number(m[1]),Number(m[2])-1,Number(m[3]),12,0,0);
+    if(!Number.isNaN(d2.getTime())) return d2;
+  }
+  return null;
+}
+
+function ageLabel(value){
+  const d=parseDateFlexible(value);
+  if(!d) return "";
+  return d.toLocaleString("es-MX",{
+    day:"2-digit",
+    month:"2-digit",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
+
+function isFresh(value,maxAgeMs){
+  const d=parseDateFlexible(value);
+  if(!d) return false;
+  const age=Date.now()-d.getTime();
+  return age>=-6*60*60*1000 && age<=maxAgeMs;
 }
 
 function directMarketCacheRead(){
@@ -2001,26 +2046,109 @@ async function fetchJson(url){
 }
 
 async function fetchDirectFx(){
-  const d=await fetchJson(MARKET_URLS.fx);
-  const rate=Number(d?.rate ?? d?.price ?? d?.value ?? d?.MXN);
+  const [today,history] = await Promise.all([
+    fetchJson(MARKET_URLS.fxToday),
+    fetchJson(MARKET_URLS.fxHistory)
+  ]);
+
+  const rate=Number(today?.rate);
+  const date=today?.date || today?.updatedAt || today?.timestamp;
   if(!Number.isFinite(rate)) throw new Error("USD/MXN inválido");
+  if(!isFresh(date,MARKET_MAX_AGE_MS.fx)) throw new Error("USD/MXN desactualizado");
+
+  let direction="flat";
+  let changeText="FIX Banxico";
+
+  const rows=Array.isArray(history) ? history : (history?.data || history?.rates || []);
+  if(Array.isArray(rows) && rows.length>=2){
+    const normalized=rows
+      .map(x=>({date:x?.date,rate:Number(x?.rate)}))
+      .filter(x=>x.date && Number.isFinite(x.rate))
+      .sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+
+    const idx=normalized.findIndex(x=>String(x.date)===String(date));
+    const currentIndex=idx>=0 ? idx : normalized.length-1;
+    const prev=normalized[currentIndex-1];
+
+    if(prev && prev.rate){
+      const pct=((rate/prev.rate)-1)*100;
+      direction=pct>0?"up":pct<0?"down":"flat";
+      changeText=`${pct>0?"+":""}${pct.toFixed(2)}% · ${date}`;
+    }else{
+      changeText=`FIX Banxico · ${date}`;
+    }
+  }else{
+    changeText=`FIX Banxico · ${date}`;
+  }
+
   return {
     value:"$"+rate.toFixed(4),
     raw:rate,
-    meta:"Directo · "+ageLabel(d?.timestamp),
-    direction:directionFromPrevious("fx",rate)
+    meta:changeText,
+    direction
   };
 }
 
+function parseBrentPayload(d){
+  const candidates=[
+    d?.price,
+    d?.value,
+    d?.current,
+    d?.data?.price,
+    d?.data?.value,
+    d?.brent?.price
+  ];
+  const price=candidates.map(Number).find(Number.isFinite);
+
+  const date=
+    d?.date ||
+    d?.timestamp ||
+    d?.updated ||
+    d?.updatedAt ||
+    d?.asOf ||
+    d?.data?.date ||
+    d?.data?.timestamp ||
+    d?.data?.updatedAt;
+
+  const changeCandidates=[
+    d?.changePercent,
+    d?.change_pct,
+    d?.percentChange,
+    d?.data?.changePercent,
+    d?.data?.percentChange
+  ];
+  const pct=changeCandidates.map(Number).find(Number.isFinite);
+
+  return {price,date,pct};
+}
+
 async function fetchDirectBrent(){
-  const d=await fetchJson(MARKET_URLS.brent);
-  const price=Number(d?.price);
-  if(!Number.isFinite(price)) throw new Error("Brent inválido");
+  let d;
+  try{
+    d=await fetchJson(MARKET_URLS.brent);
+  }catch(e){
+    d=await fetchJson(MARKET_URLS.brentFallback);
+  }
+
+  const p=parseBrentPayload(d);
+  if(!Number.isFinite(p.price)) throw new Error("Brent inválido");
+  if(!isFresh(p.date,MARKET_MAX_AGE_MS.brent)) throw new Error("Brent desactualizado");
+
+  let direction="flat";
+  let meta="Brent";
+  if(Number.isFinite(p.pct)){
+    direction=p.pct>0?"up":p.pct<0?"down":"flat";
+    meta=`${p.pct>0?"+":""}${p.pct.toFixed(2)}% · ${ageLabel(p.date)}`;
+  }else{
+    direction=directionFromPrevious("brent",p.price);
+    meta=`Stooq · ${ageLabel(p.date)}`;
+  }
+
   return {
-    value:"$"+price.toFixed(2)+"/bbl",
-    raw:price,
-    meta:"Directo · "+ageLabel(d?.timestamp),
-    direction:directionFromPrevious("brent",price)
+    value:"$"+p.price.toFixed(2)+"/bbl",
+    raw:p.price,
+    meta,
+    direction
   };
 }
 
@@ -2028,15 +2156,22 @@ async function fetchDirectDieselMX(){
   const d=await fetchJson(MARKET_URLS.fuel);
   const mx=d?.data?.MX || d?.data?.mx;
   if(!mx) throw new Error("México no disponible");
+
   const price=Number(mx?.prices?.diesel ?? mx?.prices?.diesel_regular);
   const currency=mx?.currencies?.diesel ?? mx?.currency ?? "MXN";
   const unit=mx?.units?.diesel ?? mx?.unit ?? "liter";
+  const date=mx?.updatedAt || mx?.timestamp || d?.updatedAt || d?.timestamp;
+
   if(!Number.isFinite(price)) throw new Error("Diésel MX inválido");
+  if(date && !isFresh(date,MARKET_MAX_AGE_MS.diesel)) throw new Error("Diésel MX desactualizado");
+
   const unitLabel=String(unit).toLowerCase().includes("gallon")?"/gal":"/L";
+  const meta=date ? `México · ${ageLabel(date)}` : "México · OpenVan.camp";
+
   return {
     value:(currency==="MXN"?"$":"")+price.toFixed(2)+unitLabel,
     raw:price,
-    meta:"México · OpenVan.camp",
+    meta,
     direction:directionFromPrevious("diesel",price)
   };
 }
@@ -2051,32 +2186,42 @@ function deepStrings(obj,out=[]){
   return out;
 }
 
+function extractSidofDieselQuota(text){
+  const normalized=String(text||"").replace(/\s+/g," ");
+
+  const patterns=[
+    /Di[eé]sel[^$0-9]{0,80}\$?\s*([0-9]+\.[0-9]{4})/i,
+    /Di[eé]sel[^0-9]{0,120}([0-9]+\.[0-9]{2,4})/i,
+    /([0-9]+\.[0-9]{4})[^A-Za-zÁÉÍÓÚÑáéíóúñ]{0,80}Di[eé]sel/i
+  ];
+
+  for(const re of patterns){
+    const m=normalized.match(re);
+    if(!m) continue;
+    const value=Number(m[1]);
+    if(Number.isFinite(value) && value>=0 && value<=10) return value;
+  }
+  return null;
+}
+
 async function fetchDirectIeps(){
-  // Direct SIDOF first. If the browser blocks CORS, use a public GET-only CORS relay.
   let data;
   try{
     data=await fetchJson(MARKET_URLS.sidofSearch);
   }catch(e){
-    const proxied="https://proxy.cors.dev/"+MARKET_URLS.sidofSearch;
-    data=await fetchJson(proxied);
+    throw new Error("SIDOF no accesible desde navegador");
   }
 
-  const text=deepStrings(data).join(" ");
-  // We only show a numeric value if SIDOF payload itself contains an explicit
-  // diesel/diésel context near a decimal amount. Otherwise, no value is invented.
-  const normalized=text.replace(/\s+/g," ");
-  const m=normalized.match(/(?:di[eé]sel|diesel)[^0-9]{0,120}([0-9]+\.[0-9]{2,4})/i)
-       || normalized.match(/([0-9]+\.[0-9]{2,4})[^a-záéíóúñ]{0,80}(?:di[eé]sel|diesel)/i);
+  const strings=deepStrings(data);
+  const joined=strings.join(" ");
+  const value=extractSidofDieselQuota(joined);
 
-  if(!m) throw new Error("SIDOF sin cuota numérica identificable");
-
-  const value=Number(m[1]);
-  if(!Number.isFinite(value) || value<0 || value>20) throw new Error("Cuota IEPS fuera de rango");
+  if(!Number.isFinite(value)) throw new Error("SIDOF sin cuota vigente identificable");
 
   return {
     value:"$"+value.toFixed(4)+"/L",
     raw:value,
-    meta:"SHCP · DOF/SIDOF",
+    meta:"Cuota disminuida · DOF/SIDOF",
     direction:directionFromPrevious("ieps",value)
   };
 }
@@ -2096,8 +2241,8 @@ function renderDirectMarketResult(id,result){
 function renderDirectMarketError(id){
   const map={
     diesel:["briefDiesel","briefDieselChange","OpenVan.camp"],
-    fx:["briefFX","briefFXChange","Croncopia"],
-    brent:["briefBrent","briefBrentChange","Croncopia"],
+    fx:["briefFX","briefFXChange","FIX Banxico"],
+    brent:["briefBrent","briefBrentChange","Brent sin dato vigente"],
     ieps:["briefIEPS","briefIEPSChange","DOF/SIDOF"]
   };
   const ids=map[id];
@@ -2150,7 +2295,7 @@ async function loadAvailabilityBrief(){
   }catch(e){
     console.error("Disponibilidad Morning Brief",e);
     renderAvailabilityData(null);
-    $("availabilityConfigMsg").textContent="Disponibilidad no disponible. El resto del MatePad continúa funcionando.";
+    $("availabilityConfigMsg").textContent="Disponibilidad no disponible: "+(e?.message||"error de conexión")+". El resto del MatePad continúa funcionando.";
   }
 }
 
