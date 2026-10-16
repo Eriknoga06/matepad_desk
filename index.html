@@ -2,155 +2,404 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#111111">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0e0f12">
 <link rel="manifest" href="manifest.webmanifest">
 <title>MatePad Desk</title>
 <style>
-body{margin:0;background:#0e0f12;color:#f4f6f8;font-family:Arial,sans-serif}
-main{max-width:1100px;margin:auto;padding:24px}
-.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
-#clock{font-size:84px;font-weight:700;line-height:1}
-#date,.muted{color:#a9b0ba}
-.card{background:#17191f;border:1px solid #30343d;border-radius:24px;padding:22px;margin-top:20px}
-.player{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:center}
-#cover{width:100%;aspect-ratio:1;object-fit:cover;border-radius:18px;background:#222}
-h1{font-size:40px;margin:6px 0}
-button{background:#242832;color:white;border:0;border-radius:14px;padding:14px 18px;font-size:16px;margin-right:8px;margin-top:8px}
-.primary{background:#1db954;color:#06140b}
-.bar{height:8px;background:#292d35;border-radius:99px;overflow:hidden;margin-top:18px}
-#fill{height:100%;width:0;background:#1db954}
-.times{display:flex;justify-content:space-between;color:#a9b0ba;font-size:12px;margin-top:6px}
+:root{
+  --bg:#0e0f12;--panel:#17191f;--panel2:#20232b;--text:#f4f6f8;
+  --muted:#a9b0ba;--line:#30343d;--accent:#1db954;--warn:#d9a441;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif}
+main{max-width:1180px;margin:auto;padding:22px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:18px}
+#clock{font-size:clamp(56px,8vw,100px);font-weight:720;line-height:.95;letter-spacing:-.045em}
+#date{font-size:17px;margin-top:10px;text-transform:capitalize}
+.muted{color:var(--muted)}
+.status{padding:10px 14px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:1.28fr .72fr;gap:18px;margin-top:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:26px;padding:22px}
+.spotify{display:grid;grid-template-columns:minmax(190px,300px) 1fr;gap:24px;align-items:center}
+#cover{width:100%;aspect-ratio:1;object-fit:cover;border-radius:20px;background:var(--panel2)}
+.eyebrow{color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+h1{font-size:clamp(30px,4vw,48px);line-height:1.04;margin:8px 0}
+.artist{font-size:20px;color:var(--muted)}
+.device{font-size:14px;color:var(--muted);margin-top:10px}
+.bar{height:8px;background:var(--panel2);border-radius:99px;overflow:hidden;margin-top:22px}
+#fill{height:100%;width:0;background:var(--accent)}
+.times{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:6px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+button,input{font:inherit}
+button{border:0;border-radius:14px;padding:13px 16px;font-weight:650;background:var(--panel2);color:var(--text)}
+button.primary{background:var(--accent);color:#06140b}
+button.secondary{border:1px solid var(--line)}
+button:disabled{opacity:.45}
+.weather-main{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-top:10px}
+.temp{font-size:58px;font-weight:700;line-height:1}
+.condition{text-align:right;font-size:16px}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.metric{background:var(--panel2);border-radius:16px;padding:14px}
+.metric .v{font-size:19px;font-weight:650;margin-top:3px}
+.location{font-size:14px;color:var(--muted);margin-top:7px}
+.settings{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.settings-row{display:flex;gap:8px;flex-wrap:wrap}
+input{min-width:0;flex:1;background:#111318;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px 13px;font-size:16px}
+.note{color:var(--muted);font-size:13px;line-height:1.45}
 .hidden{display:none}
-@media(max-width:720px){.player{grid-template-columns:1fr}#clock{font-size:60px}}
+.error{color:#ffb6b6}
+@media(max-width:820px){
+  .grid{grid-template-columns:1fr}
+  .spotify{grid-template-columns:1fr}
+  #cover{max-width:360px;margin:auto}
+}
 </style>
 </head>
 <body>
 <main>
-<div class="top">
-  <div><div id="clock">--:--</div><div id="date" class="muted">—</div></div>
-  <div id="state" class="muted">Spotify desconectado</div>
-</div>
-
-<section class="card" id="login">
-  <div class="muted">SPOTIFY</div>
-  <h1>Conecta tu cuenta</h1>
-  <p class="muted">Usa OAuth con PKCE. No necesita Client Secret.</p>
-  <button id="loginBtn" class="primary">Conectar Spotify</button>
-</section>
-
-<section class="card player hidden" id="player">
-  <img id="cover" alt="Portada">
-  <div>
-    <div class="muted">AHORA SUENA</div>
-    <h1 id="track">Sin reproducción activa</h1>
-    <div id="artist" class="muted">—</div>
-    <div id="device" class="muted" style="margin-top:10px">—</div>
-    <div class="bar"><div id="fill"></div></div>
-    <div class="times"><span id="pos">0:00</span><span id="dur">0:00</span></div>
-    <div style="margin-top:18px">
-      <button id="prev">◀</button>
-      <button id="play" class="primary">▶</button>
-      <button id="next">▶</button>
-      <button id="refresh">Actualizar</button>
-      <button id="logout">Desconectar</button>
+  <div class="top">
+    <div>
+      <div id="clock">--:--</div>
+      <div id="date" class="muted">—</div>
     </div>
+    <div id="authState" class="status">Spotify desconectado</div>
   </div>
-</section>
+
+  <div class="grid">
+    <section class="card">
+      <div id="loginPanel">
+        <div class="eyebrow">Spotify</div>
+        <h1>Conecta tu cuenta</h1>
+        <p class="note">Autenticación directa con Spotify mediante PKCE. No usa Client Secret.</p>
+        <button id="loginBtn" class="primary">Conectar Spotify</button>
+      </div>
+
+      <div id="playerPanel" class="spotify hidden">
+        <img id="cover" alt="Portada del álbum">
+        <div>
+          <div class="eyebrow">Ahora suena</div>
+          <h1 id="track">Sin reproducción activa</h1>
+          <div id="artist" class="artist">—</div>
+          <div id="device" class="device">—</div>
+
+          <div class="bar"><div id="fill"></div></div>
+          <div class="times"><span id="pos">0:00</span><span id="dur">0:00</span></div>
+
+          <div class="controls">
+            <button id="prevBtn">◀</button>
+            <button id="playBtn" class="primary">▶</button>
+            <button id="nextBtn">▶</button>
+            <button id="refreshBtn" class="secondary">Actualizar</button>
+            <button id="logoutBtn" class="secondary">Desconectar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="card">
+      <div class="eyebrow">Clima</div>
+      <div class="weather-main">
+        <div>
+          <div id="temperature" class="temp">--°</div>
+          <div id="weatherLocation" class="location">Configura tu ubicación</div>
+        </div>
+        <div>
+          <div id="weatherCondition" class="condition">—</div>
+          <div id="weatherUpdated" class="note" style="text-align:right;margin-top:5px"></div>
+        </div>
+      </div>
+
+      <div class="metric-grid">
+        <div class="metric">
+          <div class="eyebrow">Sensación</div>
+          <div id="feels" class="v">—</div>
+        </div>
+        <div class="metric">
+          <div class="eyebrow">Máx / mín</div>
+          <div id="maxmin" class="v">—</div>
+        </div>
+        <div class="metric">
+          <div class="eyebrow">Lluvia</div>
+          <div id="rain" class="v">—</div>
+        </div>
+        <div class="metric">
+          <div class="eyebrow">Viento</div>
+          <div id="wind" class="v">—</div>
+        </div>
+      </div>
+
+      <div class="settings">
+        <div class="eyebrow">Ubicación del clima</div>
+        <div class="settings-row" style="margin-top:9px">
+          <input id="cityInput" autocomplete="off" placeholder="Ej. Cadereyta Jiménez, Nuevo León">
+          <button id="cityBtn">Buscar</button>
+        </div>
+        <div class="settings-row" style="margin-top:8px">
+          <button id="geoBtn" class="secondary">Usar mi ubicación</button>
+          <button id="weatherRefreshBtn" class="secondary">Actualizar clima</button>
+        </div>
+        <div id="weatherMsg" class="note" style="margin-top:9px">Open-Meteo · sin clave API.</div>
+      </div>
+
+      <div class="settings">
+        <div class="eyebrow">Pendientes</div>
+        <div class="note" style="margin-top:7px">El siguiente paso será conectar aquí tu endpoint de Apps Script.</div>
+      </div>
+    </aside>
+  </div>
+</main>
 
 <script>
 const CLIENT_ID="1ccc4c7c8c7c48f9a425ed5b892ad203";
 const REDIRECT_URI=location.origin+location.pathname;
 const SCOPES="user-read-currently-playing user-read-playback-state user-modify-playback-state";
 const $=id=>document.getElementById(id);
-let token=sessionStorage.sp_access_token||"", refresh=sessionStorage.sp_refresh_token||"";
-let expires=Number(sessionStorage.sp_expires_at||0), isPlaying=false, timer=null;
 
-function clock(){
- const n=new Date();
- $("clock").textContent=n.toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit",hour12:false});
- $("date").textContent=n.toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+let token=sessionStorage.getItem("sp_access_token")||"";
+let refresh=sessionStorage.getItem("sp_refresh_token")||"";
+let expires=Number(sessionStorage.getItem("sp_expires_at")||0);
+let isPlaying=false, playerTimer=null;
+let weatherTimer=null;
+let weatherConfig=null;
+
+function updateClock(){
+  const n=new Date();
+  $("clock").textContent=n.toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit",hour12:false});
+  $("date").textContent=n.toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 }
-clock(); setInterval(clock,1000);
+updateClock(); setInterval(updateClock,1000);
 
 function b64(b){return btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
-function verifier(){let a=new Uint8Array(64);crypto.getRandomValues(a);return b64(a)}
+function verifier(){const a=new Uint8Array(64);crypto.getRandomValues(a);return b64(a)}
 async function challenge(v){return b64(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(v)))}
 
 async function login(){
- const v=verifier();sessionStorage.sp_verifier=v;
- const c=await challenge(v);
- const q=new URLSearchParams({client_id:CLIENT_ID,response_type:"code",redirect_uri:REDIRECT_URI,scope:SCOPES,code_challenge_method:"S256",code_challenge:c});
- location.href="https://accounts.spotify.com/authorize?"+q;
+  const v=verifier();
+  sessionStorage.setItem("sp_verifier",v);
+  const c=await challenge(v);
+  const q=new URLSearchParams({
+    client_id:CLIENT_ID,response_type:"code",redirect_uri:REDIRECT_URI,
+    scope:SCOPES,code_challenge_method:"S256",code_challenge:c
+  });
+  location.href="https://accounts.spotify.com/authorize?"+q;
 }
-
 function saveTokens(d){
- token=d.access_token; if(d.refresh_token) refresh=d.refresh_token;
- expires=Date.now()+(d.expires_in-60)*1000;
- sessionStorage.sp_access_token=token;sessionStorage.sp_refresh_token=refresh;sessionStorage.sp_expires_at=expires;
+  token=d.access_token;
+  if(d.refresh_token) refresh=d.refresh_token;
+  expires=Date.now()+(d.expires_in-60)*1000;
+  sessionStorage.setItem("sp_access_token",token);
+  sessionStorage.setItem("sp_refresh_token",refresh);
+  sessionStorage.setItem("sp_expires_at",String(expires));
 }
-
 async function exchange(code){
- const body=new URLSearchParams({client_id:CLIENT_ID,grant_type:"authorization_code",code,redirect_uri:REDIRECT_URI,code_verifier:sessionStorage.sp_verifier});
- const r=await fetch("https://accounts.spotify.com/api/token",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body});
- if(!r.ok) throw new Error("auth");
- saveTokens(await r.json());
- history.replaceState({},"",REDIRECT_URI);
+  const body=new URLSearchParams({
+    client_id:CLIENT_ID,grant_type:"authorization_code",code,
+    redirect_uri:REDIRECT_URI,code_verifier:sessionStorage.getItem("sp_verifier")
+  });
+  const r=await fetch("https://accounts.spotify.com/api/token",{
+    method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body
+  });
+  if(!r.ok) throw new Error("No se pudo autenticar Spotify");
+  saveTokens(await r.json());
+  history.replaceState({},"",REDIRECT_URI);
 }
-
 async function refreshToken(){
- if(!refresh) return false;
- const body=new URLSearchParams({client_id:CLIENT_ID,grant_type:"refresh_token",refresh_token:refresh});
- const r=await fetch("https://accounts.spotify.com/api/token",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body});
- if(!r.ok) return false;
- saveTokens(await r.json()); return true;
+  if(!refresh) return false;
+  const body=new URLSearchParams({
+    client_id:CLIENT_ID,grant_type:"refresh_token",refresh_token:refresh
+  });
+  const r=await fetch("https://accounts.spotify.com/api/token",{
+    method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body
+  });
+  if(!r.ok) return false;
+  saveTokens(await r.json());
+  return true;
 }
-
 async function api(path,opt={}){
- if(Date.now()>=expires && !(await refreshToken())) throw new Error("expired");
- const headers=Object.assign({},opt.headers||{},{Authorization:"Bearer "+token});
- return fetch("https://api.spotify.com/v1"+path,Object.assign({},opt,{headers}));
+  if(Date.now()>=expires && !(await refreshToken())) throw new Error("Sesión vencida");
+  const headers=Object.assign({},opt.headers||{},{Authorization:"Bearer "+token});
+  const r=await fetch("https://api.spotify.com/v1"+path,Object.assign({},opt,{headers}));
+  if(r.status===401){
+    if(await refreshToken()) return api(path,opt);
+  }
+  return r;
 }
-
-function fmt(ms){let s=Math.floor((ms||0)/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
-
-async function load(){
- const r=await api("/me/player");
- if(r.status===204){$("track").textContent="Sin reproducción activa";$("artist").textContent="—";$("device").textContent="Abre Spotify en otro dispositivo";return}
- if(!r.ok) return;
- const d=await r.json(); isPlaying=!!d.is_playing; const t=d.item;
- if(!t)return;
- $("track").textContent=t.name||"Sin título";
- $("artist").textContent=(t.artists||[]).map(x=>x.name).join(", ");
- $("cover").src=t.album?.images?.[0]?.url||"";
- $("device").textContent=d.device?.name?"Reproduciendo en: "+d.device.name:"";
- $("fill").style.width=(t.duration_ms?Math.min(100,(d.progress_ms/t.duration_ms)*100):0)+"%";
- $("pos").textContent=fmt(d.progress_ms); $("dur").textContent=fmt(t.duration_ms);
- $("play").textContent=isPlaying?"⏸":"▶";
+function fmt(ms){
+  const s=Math.floor((ms||0)/1000);
+  return Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
 }
-
-async function control(path,method="POST"){await api(path,{method});setTimeout(load,300)}
-function show(){
- $("login").classList.add("hidden");$("player").classList.remove("hidden");$("state").textContent="Spotify conectado";
- if(timer)clearInterval(timer);load();timer=setInterval(load,5000);
+async function loadPlayback(){
+  try{
+    const r=await api("/me/player");
+    if(r.status===204){
+      $("track").textContent="Sin reproducción activa";
+      $("artist").textContent="—";
+      $("device").textContent="Abre Spotify en alguno de tus dispositivos";
+      $("fill").style.width="0%";
+      $("pos").textContent="0:00"; $("dur").textContent="0:00";
+      return;
+    }
+    if(!r.ok) throw new Error("Spotify "+r.status);
+    const d=await r.json();
+    isPlaying=!!d.is_playing;
+    const t=d.item;
+    if(!t) return;
+    $("track").textContent=t.name||"Sin título";
+    $("artist").textContent=(t.artists||[]).map(a=>a.name).join(", ");
+    $("cover").src=t.album?.images?.[0]?.url||"";
+    $("device").textContent=d.device?.name?"Reproduciendo en: "+d.device.name:"";
+    const pct=t.duration_ms?Math.min(100,Math.max(0,(d.progress_ms/t.duration_ms)*100)):0;
+    $("fill").style.width=pct+"%";
+    $("pos").textContent=fmt(d.progress_ms); $("dur").textContent=fmt(t.duration_ms);
+    $("playBtn").textContent=isPlaying?"⏸":"▶";
+  }catch(e){
+    $("authState").textContent="Error de Spotify";
+    console.error(e);
+  }
+}
+async function control(path,method="POST"){
+  const r=await api(path,{method});
+  if(!r.ok && r.status!==204) console.warn("Spotify control",r.status);
+  setTimeout(loadPlayback,350);
+}
+function showPlayer(){
+  $("loginPanel").classList.add("hidden");
+  $("playerPanel").classList.remove("hidden");
+  $("authState").textContent="Spotify conectado";
+  if(playerTimer) clearInterval(playerTimer);
+  loadPlayback();
+  playerTimer=setInterval(loadPlayback,5000);
 }
 function logout(){
- sessionStorage.clear();token=refresh="";if(timer)clearInterval(timer);
- $("player").classList.add("hidden");$("login").classList.remove("hidden");$("state").textContent="Spotify desconectado";
+  sessionStorage.clear();
+  token=refresh="";
+  if(playerTimer) clearInterval(playerTimer);
+  $("playerPanel").classList.add("hidden");
+  $("loginPanel").classList.remove("hidden");
+  $("authState").textContent="Spotify desconectado";
 }
 
-$("loginBtn").onclick=login;$("refresh").onclick=load;$("logout").onclick=logout;
-$("prev").onclick=()=>control("/me/player/previous");
-$("next").onclick=()=>control("/me/player/next");
-$("play").onclick=()=>control("/me/player/"+(isPlaying?"pause":"play"),"PUT");
+const WEATHER_CODES={
+  0:"Despejado",1:"Mayormente despejado",2:"Parcialmente nublado",3:"Nublado",
+  45:"Niebla",48:"Niebla con escarcha",
+  51:"Llovizna ligera",53:"Llovizna",55:"Llovizna intensa",
+  61:"Lluvia ligera",63:"Lluvia",65:"Lluvia intensa",
+  71:"Nieve ligera",73:"Nieve",75:"Nieve intensa",
+  80:"Chubascos ligeros",81:"Chubascos",82:"Chubascos intensos",
+  95:"Tormenta",96:"Tormenta con granizo",99:"Tormenta fuerte con granizo"
+};
 
-(async()=>{
- const code=new URLSearchParams(location.search).get("code");
- if(code){await exchange(code);show()} else if(token&&refresh) show();
+function saveWeatherConfig(cfg){
+  weatherConfig=cfg;
+  localStorage.setItem("desk_weather",JSON.stringify(cfg));
+}
+function loadWeatherConfig(){
+  try{
+    const x=JSON.parse(localStorage.getItem("desk_weather")||"null");
+    if(x && Number.isFinite(x.latitude) && Number.isFinite(x.longitude)) weatherConfig=x;
+  }catch(e){}
+}
+async function geocodeCity(){
+  const q=$("cityInput").value.trim();
+  if(!q){$("weatherMsg").textContent="Escribe una ciudad.";return;}
+  $("weatherMsg").textContent="Buscando ubicación…";
+  try{
+    const u="https://geocoding-api.open-meteo.com/v1/search?"+new URLSearchParams({
+      name:q,count:"1",language:"es",format:"json",countryCode:"MX"
+    });
+    const r=await fetch(u);
+    if(!r.ok) throw new Error("geocode");
+    const d=await r.json();
+    if(!d.results?.length){$("weatherMsg").textContent="No encontré esa ubicación.";return;}
+    const x=d.results[0];
+    const label=[x.name,x.admin1].filter(Boolean).join(", ");
+    saveWeatherConfig({latitude:x.latitude,longitude:x.longitude,label});
+    await loadWeather();
+  }catch(e){
+    $("weatherMsg").textContent="No pude buscar la ubicación.";
+  }
+}
+function useGeolocation(){
+  if(!navigator.geolocation){
+    $("weatherMsg").textContent="Este navegador no ofrece ubicación.";
+    return;
+  }
+  $("weatherMsg").textContent="Solicitando ubicación…";
+  navigator.geolocation.getCurrentPosition(async p=>{
+    saveWeatherConfig({
+      latitude:p.coords.latitude,
+      longitude:p.coords.longitude,
+      label:"Mi ubicación"
+    });
+    await loadWeather();
+  },()=>{
+    $("weatherMsg").textContent="No se concedió acceso a la ubicación.";
+  },{enableHighAccuracy:false,timeout:10000,maximumAge:3600000});
+}
+async function loadWeather(){
+  if(!weatherConfig){
+    $("weatherMsg").textContent="Busca una ciudad o pulsa “Usar mi ubicación”.";
+    return;
+  }
+  $("weatherMsg").textContent="Actualizando clima…";
+  try{
+    const p=new URLSearchParams({
+      latitude:String(weatherConfig.latitude),
+      longitude:String(weatherConfig.longitude),
+      current:"temperature_2m,apparent_temperature,weather_code,wind_speed_10m",
+      daily:"temperature_2m_max,temperature_2m_min,precipitation_probability_max",
+      temperature_unit:"celsius",
+      wind_speed_unit:"kmh",
+      timezone:"auto",
+      forecast_days:"1"
+    });
+    const r=await fetch("https://api.open-meteo.com/v1/forecast?"+p);
+    if(!r.ok) throw new Error("weather");
+    const d=await r.json();
+    const c=d.current||{}, day=d.daily||{};
+    $("temperature").textContent=Math.round(c.temperature_2m)+"°";
+    $("feels").textContent=Math.round(c.apparent_temperature)+"°C";
+    $("weatherCondition").textContent=WEATHER_CODES[c.weather_code]||"Condición "+c.weather_code;
+    $("maxmin").textContent=Math.round(day.temperature_2m_max?.[0])+"° / "+Math.round(day.temperature_2m_min?.[0])+"°";
+    $("rain").textContent=(day.precipitation_probability_max?.[0] ?? 0)+"%";
+    $("wind").textContent=Math.round(c.wind_speed_10m||0)+" km/h";
+    $("weatherLocation").textContent=weatherConfig.label||"Ubicación guardada";
+    $("weatherUpdated").textContent="Actualizado "+new Date().toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit"});
+    $("weatherMsg").textContent="Clima actualizado automáticamente cada 15 min.";
+  }catch(e){
+    $("weatherMsg").textContent="No pude actualizar el clima. Verifica la conexión.";
+  }
+}
+
+$("loginBtn").addEventListener("click",login);
+$("refreshBtn").addEventListener("click",loadPlayback);
+$("logoutBtn").addEventListener("click",logout);
+$("prevBtn").addEventListener("click",()=>control("/me/player/previous"));
+$("nextBtn").addEventListener("click",()=>control("/me/player/next"));
+$("playBtn").addEventListener("click",()=>control("/me/player/"+(isPlaying?"pause":"play"),"PUT"));
+$("cityBtn").addEventListener("click",geocodeCity);
+$("cityInput").addEventListener("keydown",e=>{if(e.key==="Enter")geocodeCity()});
+$("geoBtn").addEventListener("click",useGeolocation);
+$("weatherRefreshBtn").addEventListener("click",loadWeather);
+
+(async function init(){
+  loadWeatherConfig();
+  if(weatherConfig) loadWeather();
+  weatherTimer=setInterval(loadWeather,15*60*1000);
+
+  const code=new URLSearchParams(location.search).get("code");
+  if(code){
+    try{await exchange(code);showPlayer();}
+    catch(e){$("authState").textContent="Error al conectar";}
+  }else if(token&&refresh){
+    showPlayer();
+  }
 })();
 
-if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(()=>{});
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("./sw.js").catch(()=>{});
+}
 </script>
-</main>
 </body>
 </html>
