@@ -2,7 +2,7 @@
   "id": "./",
   "name": "MatePad Desk",
   "short_name": "MatePad Desk",
-  "description": "MatePad Desk con Spotify persistente, visuales animados, clima y pendientes.",
+  "description": "MatePad Desk con Spotify híbrido, Morning Brief y tráfico Google Routes cada 15 min.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

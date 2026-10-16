@@ -248,6 +248,59 @@ main{max-width:1360px;padding:10px 14px}
   .visual-shell,#musicVisual{min-height:190px}
 }
 
+
+/* V11 · Morning Brief / traffic context */
+.left-stack{display:grid;gap:10px;align-content:start;min-width:0}
+.context-card{padding:12px 14px}
+.context-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.context-title{font-size:17px;font-weight:720;margin-top:2px;line-height:1.15}
+.context-chip{font-size:10px;font-weight:750;padding:6px 9px;border:1px solid var(--line);border-radius:999px;color:var(--muted);white-space:nowrap}
+.brief-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(250px,.65fr);gap:14px;align-items:center;margin-top:10px}
+.brief-headline{font-size:18px;font-weight:720;line-height:1.2}
+.brief-detail{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.35}
+.brief-metrics,.traffic-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.brief-metrics>div,.traffic-facts>div{background:var(--panel2);border-radius:11px;padding:8px 9px;min-width:0}
+.brief-metrics span,.traffic-facts span{display:block;font-size:8.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.brief-metrics strong,.traffic-facts strong{display:block;font-size:14px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.traffic-grid{display:grid;grid-template-columns:minmax(160px,.6fr) minmax(0,1.4fr);gap:14px;align-items:center;margin-top:9px}
+.traffic-duration{font-size:38px;font-weight:780;line-height:1;letter-spacing:-.04em}
+.traffic-status{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.3}
+.traffic-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px}
+.traffic-link{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);color:var(--text);text-decoration:none;font-size:10px;font-weight:700}
+.traffic-level-normal{color:#8ed6a5}
+.traffic-level-medium{color:#f1cf76}
+.traffic-level-heavy{color:#ff9d9d}
+@media(max-width:980px){
+  .brief-grid,.traffic-grid{grid-template-columns:1fr}
+}
+
+
+/* V13 · neon mesh visual direction */
+.visual-shell{
+  min-height:310px;
+  background:#05070a;
+}
+#musicVisual{min-height:310px}
+.visual-overlay{
+  background:linear-gradient(180deg,transparent,rgba(0,0,0,.48));
+  left:0;right:0;bottom:0;
+  padding:28px 12px 10px;
+}
+@media(max-width:980px){
+  .visual-shell,#musicVisual{min-height:270px}
+}
+@media(max-width:700px){
+  .visual-shell,#musicVisual{min-height:205px}
+}
+
+
+/* V14 · hybrid scene + mesh */
+.visual-shell{
+  min-height:315px;
+  background:#05070a;
+}
+#musicVisual{min-height:315px}
+
 </style>
 </head>
 <body>
@@ -261,6 +314,7 @@ main{max-width:1360px;padding:10px 14px}
   </div>
 
   <div class="grid">
+    <div class="left-stack">
     <section class="card spotify-card">
       <div id="loginPanel">
         <div class="eyebrow">Spotify</div>
@@ -303,7 +357,58 @@ main{max-width:1360px;padding:10px 14px}
       </div>
     </section>
 
-    
+    <section class="card context-card" id="contextCard">
+      <div id="morningBriefPanel">
+        <div class="context-head">
+          <div>
+            <div class="eyebrow">Morning Brief</div>
+            <div class="context-title">Lo importante para arrancar</div>
+          </div>
+          <div id="briefStamp" class="context-chip">Antes de 2:00 pm</div>
+        </div>
+        <div class="brief-grid">
+          <div class="brief-main">
+            <div id="briefHeadline" class="brief-headline">Preparando resumen…</div>
+            <div id="briefDetail" class="brief-detail">Clima y pendientes se integrarán automáticamente.</div>
+          </div>
+          <div class="brief-metrics">
+            <div><span>Clima</span><strong id="briefWeather">—</strong></div>
+            <div><span>Alta prioridad</span><strong id="briefHigh">—</strong></div>
+            <div><span>Vencidos</span><strong id="briefOverdue">—</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="trafficPanel" class="hidden">
+        <div class="context-head">
+          <div>
+            <div class="eyebrow">Regreso a casa</div>
+            <div class="context-title">LM Transportaciones → Privada Los Olmos</div>
+          </div>
+          <div id="trafficBadge" class="context-chip">Tráfico</div>
+        </div>
+
+        <div class="traffic-grid">
+          <div>
+            <div id="trafficDuration" class="traffic-duration">-- min</div>
+            <div id="trafficStatus" class="traffic-status">Conecta Google Routes para obtener tráfico real.</div>
+          </div>
+          <div class="traffic-facts">
+            <div><span>Demora</span><strong id="trafficDelay">—</strong></div>
+            <div><span>Llegada</span><strong id="trafficArrival">—</strong></div>
+            <div><span>Distancia</span><strong id="trafficDistance">—</strong></div>
+          </div>
+        </div>
+
+        <div class="traffic-actions">
+          <button id="trafficRefreshBtn" class="secondary small-btn" type="button">Actualizar tráfico</button>
+          <a id="mapsOpenBtn" class="traffic-link" target="_blank" rel="noopener">Abrir en Google Maps</a>
+          <span id="trafficUpdated" class="note">—</span>
+        </div>
+      </div>
+    </section>
+    </div>
+
 <aside class="card compact-side">
   <section class="panel-block weather-block">
     <div class="panel-head">
@@ -402,6 +507,15 @@ main{max-width:1360px;padding:10px 14px}
       </div>
       <div id="pendingMiniStatus" class="note" style="margin-top:9px">Conectando…</div>
     </div>
+
+    <div class="settings compact-settings">
+      <div class="eyebrow">Tráfico · Google Routes</div>
+      <div class="settings-row" style="margin-top:9px">
+        <input id="trafficEndpointInput" autocomplete="off" placeholder="URL del Apps Script de tráfico (ya configurada)">
+        <button id="trafficEndpointSaveBtn" type="button">Guardar</button>
+      </div>
+      <div id="trafficConfigMsg" class="note" style="margin-top:9px">Se muestra automáticamente a partir de las 2:00 pm.</div>
+    </div>
   </details>
 </aside>
 
@@ -415,6 +529,12 @@ const REDIRECT_URI=location.origin+location.pathname;
 const SCOPES="user-read-currently-playing user-read-playback-state user-modify-playback-state";
 const PENDING_ENDPOINT="https://script.google.com/macros/s/AKfycbye1Kb1GRyUHtLZWxGXzv407JLcIroV5fsUTQzUbpJ7hHUk1aRsj3GoIXVIiNel2XilOg/exec?api=matepad";
 const PENDING_REFRESH_MS=5*60*1000;
+const TRAFFIC_REFRESH_MS=15*60*1000;
+const TRAFFIC_ENDPOINT_KEY="matepad_traffic_endpoint";
+const TRAFFIC_DEFAULT_ENDPOINT="https://script.google.com/macros/s/AKfycbytGXbRyMDpsj-fYzWTVQiy-J34wcWrAJdpOiJTDiKqyCGJyK06HBjp4LKJvW_ch1vdYA/exec";
+const TRAFFIC_ORIGIN_LABEL="LM Transportaciones";
+const TRAFFIC_DEST_LABEL="Privada Los Olmos";
+const TRAFFIC_MAPS_URL="https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent("LM Transportaciones, Autopista Cadereyta Reynosa KM 36, Cadereyta Jiménez, Nuevo León")+"&destination="+encodeURIComponent("Privada Los Olmos, Ejido El Mezquital, 66630 Apodaca, Nuevo León")+"&travelmode=driving";
 const $=id=>document.getElementById(id);
 
 const SPOTIFY_STORAGE_KEYS={
@@ -435,7 +555,14 @@ let expires=Number(localStorage.getItem(SPOTIFY_STORAGE_KEYS.expires)||0);
 let isPlaying=false, playerTimer=null;
 let currentTrackSeed=37,currentTrackProgress=0,currentTrackDuration=1,currentTrackId="";
 let visualModeIndex=1,visualRAF=0,visualRunning=false;
+let visualEnergy=0.58;
+let visualTargetEnergy=0.58;
+let visualBurst=0;
+let lastVisualTs=0;
 let weatherTimer=null;
+let lastWeatherSnapshot=null;
+let lastPendingSummary=null;
+let trafficTimer=null;
 let weatherConfig=null;
 let pendingTimer=null;
 let pendingExpanded=false;
@@ -554,7 +681,9 @@ const VISUAL_MODES=[
   "House",
   "Drum & Bass",
   "Jazz / Soul",
-  "Chill / Acoustic"
+  "Chill / Acoustic",
+  "Trap / Hip-Hop",
+  "Scene / Waveform"
 ];
 
 function hashTrack(s){
@@ -567,20 +696,37 @@ function classifyVisual(title,artist,genres=""){
   const text=(String(title||"")+" "+String(artist||"")+" "+String(genres||"")).toLowerCase();
 
   const rules=[
+    {idx:8, words:["trap","hip hop","hip-hop","rap","phonk","drill","grime"]},
     {idx:5, words:["drum and bass","drum & bass","dnb","jungle","breakbeat","liquid dnb","neurofunk"]},
     {idx:1, words:["techno","hard techno","industrial techno","rave","acid techno","minimal techno"]},
     {idx:4, words:["house","deep house","tech house","progressive house","afro house","dance","edm","electronica","electronic"]},
     {idx:3, words:["synthwave","retrowave","outrun","cyberpunk","neon","new wave"]},
     {idx:6, words:["jazz","soul","funk","blues","r&b","neo soul","motown"]},
     {idx:0, words:["lofi","lo-fi","study beats","chillhop","beats to relax","bedroom pop"]},
-    {idx:7, words:["acoustic","unplugged","folk","singer songwriter","singer-songwriter","chill","soft rock","piano","guitar"]},
-    {idx:2, words:["ambient","sleep","meditation","drone","soundscape","cinematic","atmospheric"]}
+    {idx:9, words:["reggae","dub","roots","ska","acoustic","unplugged","folk","singer songwriter","singer-songwriter","chill","soft rock","piano","guitar","ambient","sleep","meditation","drone","soundscape","cinematic","atmospheric","calm"]},
+    {idx:2, words:["downtempo","trip hop","trip-hop","mellow"]}
   ];
 
   for(const rule of rules){
     if(rule.words.some(w=>text.includes(w))) return rule.idx;
   }
   return null;
+}
+
+function inferVisualEnergy(title,artist,genres="",modeIndex=visualModeIndex){
+  const text=(String(title||"")+" "+String(artist||"")+" "+String(genres||"")).toLowerCase();
+
+  // Base motion by visual family. This is NOT beat/audio synchronization.
+  const base=[0.42,1.00,0.30,0.78,0.92,1.12,0.54,0.36,1.05,0.28][modeIndex] ?? 0.58;
+
+  let e=base;
+  const fast=["hard","speed","rave","club","remix","mix","bass","drum","break","trap","rap","hip hop","hip-hop","phonk","techno","house","dance","electro","punk","metal"];
+  const calm=["acoustic","ambient","sleep","slow","piano","ballad","chill","lofi","lo-fi","meditation","soft"];
+
+  for(const w of fast) if(text.includes(w)) e+=0.055;
+  for(const w of calm) if(text.includes(w)) e-=0.05;
+
+  return Math.max(0.22,Math.min(1.25,e));
 }
 
 function setTrackVisual(id,title,artist,genres=""){
@@ -590,18 +736,204 @@ function setTrackVisual(id,title,artist,genres=""){
     currentTrackSeed=hashTrack([id,title,artist].filter(Boolean).join("|"));
     const classified=classifyVisual(title,artist,genres);
     visualModeIndex=classified===null ? currentTrackSeed%VISUAL_MODES.length : classified;
+    visualTargetEnergy=inferVisualEnergy(title,artist,genres,visualModeIndex);
+    visualBurst=1;
     $("visualMode").textContent="Visual · "+VISUAL_MODES[visualModeIndex];
+  }else if(key){
+    visualTargetEnergy=inferVisualEnergy(title,artist,genres,visualModeIndex);
   }
 }
 
 function cycleVisualMode(){
   visualModeIndex=(visualModeIndex+1)%VISUAL_MODES.length;
+  visualTargetEnergy=[0.42,1.00,0.30,0.78,0.92,1.12,0.54,0.36,1.05,0.28][visualModeIndex] ?? 0.58;
+  visualBurst=1;
   $("visualMode").textContent="Visual · "+VISUAL_MODES[visualModeIndex];
 }
 
 function visualColor(seed,offset,alpha=1){
   const hue=(seed%360+offset)%360;
   return `hsla(${hue},72%,58%,${alpha})`;
+}
+
+function neonColor(offset=0,alpha=1){
+  const hues=[182,152,63,198,112];
+  const h=hues[(Math.abs(currentTrackSeed+offset))%hues.length];
+  return `hsla(${h},100%,62%,${alpha})`;
+}
+
+function meshHeight(nx,nz,t,energy,variant){
+  const s=(currentTrackSeed%997)/997;
+  const phase=s*Math.PI*2;
+  if(variant==="techno"){
+    return (
+      Math.sin(nx*7.2+t*3.0*energy+phase)*0.18 +
+      Math.cos(nz*8.0-t*2.5*energy+phase*.7)*0.15 +
+      Math.sin((nx+nz)*11.0+t*4.4*energy)*0.08
+    );
+  }
+  if(variant==="house"){
+    return (
+      Math.sin(nx*4.0+t*2.2*energy+phase)*0.28 +
+      Math.cos(nz*3.4-t*1.6*energy)*0.20 +
+      Math.sin((nx-nz)*5.5+t*1.8*energy)*0.12
+    );
+  }
+  if(variant==="dnb"){
+    return (
+      Math.sin(nx*10.5+t*6.5*energy+phase)*0.21 +
+      Math.cos(nz*12.0-t*5.7*energy)*0.18 +
+      Math.sin((nx+nz)*18.0+t*8.0*energy)*0.09
+    );
+  }
+  return (
+    Math.sin(nx*6.2+t*4.3*energy+phase)*0.24 +
+    Math.cos(nz*7.5-t*3.8*energy)*0.20 +
+    Math.sin((nx*nz)*12.0+t*4.7*energy)*0.12
+  );
+}
+
+function projectMeshPoint(nx,nz,y,w,h,camZ,tilt,twist){
+  // Lightweight pseudo-3D projection designed for tablet Canvas2D.
+  const z=nz+camZ;
+  const depth=Math.max(.18,z+1.55);
+  const perspective=1/depth;
+  const xRot=nx*Math.cos(twist)-y*Math.sin(twist)*.35;
+  const yRot=y*Math.cos(tilt)-nz*Math.sin(tilt)*.32;
+  return {
+    x:w*.5 + xRot*w*.50*perspective,
+    y:h*.47 + yRot*h*.92*perspective + nz*h*.035,
+    p:perspective
+  };
+}
+
+function drawNeonTerrain(ctx,w,h,t,energy,variant,mirror=false){
+  const cols=34, rows=22;
+  const pts=[];
+  const camZ=1.05 + .10*Math.sin(t*.6*energy);
+  const tilt=.30 + .06*Math.sin(t*.7);
+  const twist=.12*Math.sin(t*.45*energy);
+
+  for(let r=0;r<rows;r++){
+    const row=[];
+    const nz=(r/(rows-1))*2.25-.35;
+    for(let c=0;c<cols;c++){
+      const nx=(c/(cols-1))*2.4-1.2;
+      let y=meshHeight(nx,nz,t,energy,variant);
+      if(variant==="house") y+=Math.sin((nx*nx+nz)*5.0-t*2.0*energy)*.10;
+      const p=projectMeshPoint(nx,nz,y,w,h,camZ,tilt,twist);
+      row.push(p);
+    }
+    pts.push(row);
+  }
+
+  ctx.save();
+  ctx.globalCompositeOperation="lighter";
+  for(let r=0;r<rows;r++){
+    ctx.beginPath();
+    for(let c=0;c<cols;c++){
+      const p=pts[r][c];
+      if(c===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y);
+    }
+    const a=.13+.42*(r/(rows-1));
+    ctx.strokeStyle=neonColor(r*17,a);
+    ctx.lineWidth=(.65+1.25*(r/(rows-1)))*Math.min(2,window.devicePixelRatio||1);
+    ctx.stroke();
+  }
+  for(let c=0;c<cols;c+=2){
+    ctx.beginPath();
+    for(let r=0;r<rows;r++){
+      const p=pts[r][c];
+      if(r===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y);
+    }
+    ctx.strokeStyle=neonColor(c*11,.18);
+    ctx.lineWidth=.7*Math.min(2,window.devicePixelRatio||1);
+    ctx.stroke();
+  }
+
+  if(mirror){
+    ctx.translate(0,h);
+    ctx.scale(1,-1);
+    ctx.globalAlpha=.48;
+    for(let r=0;r<rows;r+=2){
+      ctx.beginPath();
+      for(let c=0;c<cols;c++){
+        const p=pts[r][c];
+        if(c===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y);
+      }
+      ctx.strokeStyle=neonColor(r*19,.26);
+      ctx.lineWidth=.8*Math.min(2,window.devicePixelRatio||1);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+function drawNeonTunnel(ctx,w,h,t,energy){
+  const rings=22, segs=28;
+  const cx=w*.5,cy=h*.49;
+  ctx.save();
+  ctx.globalCompositeOperation="lighter";
+  for(let r=0;r<rings;r++){
+    const z=((r/rings)+(t*.24*energy))%1;
+    const depth=.12+z*.88;
+    const rad=Math.min(w,h)*(.06+depth*.72);
+    const wob=.10*Math.sin(t*1.7*energy+r*.8);
+    ctx.beginPath();
+    for(let i=0;i<=segs;i++){
+      const a=(i/segs)*Math.PI*2 + t*.22*energy + r*.035;
+      const noise=1+.11*Math.sin(i*1.7+r*.8+t*3.4*energy)+wob;
+      const px=cx+Math.cos(a)*rad*noise;
+      const py=cy+Math.sin(a)*rad*.62*noise;
+      if(i===0)ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.strokeStyle=neonColor(r*23,.10+.52*depth);
+    ctx.lineWidth=(.7+2.2*depth)*Math.min(2,window.devicePixelRatio||1);
+    ctx.stroke();
+  }
+  for(let i=0;i<18;i++){
+    const a=(i/18)*Math.PI*2+t*.15*energy;
+    ctx.beginPath();
+    for(let r=0;r<rings;r++){
+      const z=((r/rings)+(t*.24*energy))%1;
+      const depth=.12+z*.88;
+      const rad=Math.min(w,h)*(.06+depth*.72);
+      const px=cx+Math.cos(a+r*.035)*rad;
+      const py=cy+Math.sin(a+r*.035)*rad*.62;
+      if(r===0)ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.strokeStyle=neonColor(i*29,.16);
+    ctx.lineWidth=.6*Math.min(2,window.devicePixelRatio||1);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawNeonOrb(ctx,w,h,t,energy){
+  const rings=18, segs=42;
+  const cx=w*.5,cy=h*.49;
+  const base=Math.min(w,h)*.30;
+  ctx.save();
+  ctx.globalCompositeOperation="lighter";
+  for(let r=1;r<rings;r++){
+    const lat=(r/rings-.5)*Math.PI;
+    ctx.beginPath();
+    for(let i=0;i<=segs;i++){
+      const a=(i/segs)*Math.PI*2;
+      const deform=1+
+        .15*Math.sin(a*5+t*4.8*energy+r*.7)+
+        .10*Math.cos(a*9-t*3.6*energy+r);
+      const rr=base*Math.cos(lat)*deform;
+      const zz=Math.sin(lat);
+      const px=cx + Math.cos(a+t*.38*energy)*rr;
+      const py=cy + Math.sin(a+t*.38*energy)*rr*.78 + zz*base*.52;
+      if(i===0)ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.strokeStyle=neonColor(r*31,.16+.34*(1-Math.abs(r/rings-.5)*2));
+    ctx.lineWidth=(.7+1.4*(r/rings))*Math.min(2,window.devicePixelRatio||1);
+    ctx.stroke();
+  }
+  ctx.restore();
 }
 function drawMusicVisual(ts){
   const c=$("musicVisual");
@@ -613,7 +945,19 @@ function drawMusicVisual(ts){
   if(c.width!==w||c.height!==h){c.width=w;c.height=h}
   const x=c.getContext("2d");
   const t=(ts||0)/1000;
-  const active=isPlaying?1:.22;
+  const dt=Math.min(.05,Math.max(.001,((ts||0)-(lastVisualTs||ts||0))/1000));
+  lastVisualTs=ts||0;
+
+  // Smooth energy transitions between songs/modes. Independent from the actual audio waveform.
+  visualEnergy += (visualTargetEnergy-visualEnergy)*Math.min(1,dt*2.7);
+  visualBurst=Math.max(0,visualBurst-dt*.75);
+
+  const playFactor=isPlaying?1:.16;
+  const energy=Math.max(.16,visualEnergy*playFactor);
+  const speed=.45+energy*1.75;
+  const motion=.55+energy*1.25;
+  const burst=1+visualBurst*.55;
+  const active=speed;
   const progress=Math.max(0,Math.min(1,currentTrackProgress/Math.max(1,currentTrackDuration)));
 
   x.clearRect(0,0,w,h);
@@ -627,9 +971,9 @@ function drawMusicVisual(ts){
     // LOFI · slow organic blobs
     for(let i=0;i<7;i++){
       const p=((currentTrackSeed>>>((i%4)*5))%100)/100;
-      const cx=w*(.12+.76*((Math.sin(t*(.07+i*.011)*active+p*6.28)+1)/2));
-      const cy=h*(.16+.68*((Math.cos(t*(.06+i*.009)*active+i)+1)/2));
-      const r=Math.min(w,h)*(.10+.032*(i%3))*(.88+.12*Math.sin(t*.45+i));
+      const cx=w*(.12+.76*((Math.sin(t*(.10+i*.018)*active*burst+p*6.28)+1)/2));
+      const cy=h*(.16+.68*((Math.cos(t*(.09+i*.015)*active*burst+i)+1)/2));
+      const r=Math.min(w,h)*(.10+.032*(i%3))*(.88+.12*Math.sin(t*.85*motion+i));
       const rg=x.createRadialGradient(cx,cy,0,cx,cy,r);
       rg.addColorStop(0,visualColor(currentTrackSeed,i*38,.26));
       rg.addColorStop(1,visualColor(currentTrackSeed,i*38,0));
@@ -643,22 +987,8 @@ function drawMusicVisual(ts){
     }
 
   }else if(visualModeIndex===1){
-    // TECHNO · radial sequencer
-    const cx=w*.5,cy=h*.48,base=Math.min(w,h)*.145;
-    for(let i=0;i<52;i++){
-      const a=(i/52)*Math.PI*2;
-      const pulse=.32+.68*((Math.sin(t*(2.8+((currentTrackSeed+i)%7)*.14)*active+i*.68+progress*14)+1)/2);
-      const len=Math.min(w,h)*(.06+.19*pulse);
-      x.strokeStyle=visualColor(currentTrackSeed,i*4,.28+.56*pulse);
-      x.lineWidth=(1.6+2.6*pulse)*dpr;
-      x.beginPath();
-      x.moveTo(cx+Math.cos(a)*base,cy+Math.sin(a)*base);
-      x.lineTo(cx+Math.cos(a)*(base+len),cy+Math.sin(a)*(base+len));
-      x.stroke();
-    }
-    x.beginPath();x.arc(cx,cy,base*.76,0,Math.PI*2);
-    x.strokeStyle="rgba(255,255,255,.72)";
-    x.lineWidth=1.2*dpr;x.stroke();
+    // TECHNO · neon tunnel / vortex mesh
+    drawNeonTunnel(x,w,h,t,energy);
 
   }else if(visualModeIndex===2){
     // AMBIENT · layered waves + glow
@@ -667,7 +997,7 @@ function drawMusicVisual(ts){
       const amp=h*(.025+band*.011);
       const yy=h*(.23+band*.105);
       for(let px=0;px<=w;px+=8*dpr){
-        const py=yy+Math.sin(px/(78*dpr)+t*(.22+band*.035)*active+band+progress*2)*amp;
+        const py=yy+Math.sin(px/(78*dpr)+t*(.34+band*.055)*active*motion+band+progress*2)*amp;
         if(px===0)x.moveTo(px,py); else x.lineTo(px,py);
       }
       x.strokeStyle=visualColor(currentTrackSeed,band*34,.13+band*.075);
@@ -680,75 +1010,28 @@ function drawMusicVisual(ts){
     x.fillStyle=rg;x.fillRect(0,0,w,h);
 
   }else if(visualModeIndex===3){
-    // SYNTHWAVE · neon sun + perspective grid
-    const horizon=h*.58;
-    const sunR=Math.min(w,h)*.16;
-    const sunX=w*.5,sunY=h*.36;
-    const sg=x.createLinearGradient(0,sunY-sunR,0,sunY+sunR);
-    sg.addColorStop(0,visualColor(currentTrackSeed,25,.9));
-    sg.addColorStop(1,visualColor(currentTrackSeed,320,.65));
-    x.fillStyle=sg;x.beginPath();x.arc(sunX,sunY,sunR,0,Math.PI*2);x.fill();
-
-    x.save();
-    x.beginPath();x.rect(0,horizon,w,h-horizon);x.clip();
-    x.strokeStyle=visualColor(currentTrackSeed,290,.30);
-    x.lineWidth=1*dpr;
-    for(let i=-9;i<=9;i++){
-      x.beginPath();x.moveTo(w*.5,horizon);x.lineTo(w*.5+i*w*.11,h);x.stroke();
-    }
-    for(let j=0;j<12;j++){
-      const p=j/11;
-      const y=horizon+(h-horizon)*Math.pow(p,1.8);
-      x.beginPath();x.moveTo(0,y);x.lineTo(w,y);x.stroke();
-    }
-    x.restore();
-
-    x.fillStyle="rgba(7,9,13,.7)";
-    for(let s=0;s<5;s++) x.fillRect(sunX-sunR,sunY-sunR*.35+s*sunR*.2,sunR*2,2*dpr);
+    // SYNTHWAVE · moving neon terrain
+    drawNeonTerrain(x,w,h,t,energy,"house",false);
 
   }else if(visualModeIndex===4){
-    // HOUSE · four-on-the-floor pulse tiles
-    const cols=6,rows=4,gap=8*dpr;
-    const cw=(w-gap*(cols+1))/cols;
-    const ch=(h-gap*(rows+1))/rows;
-    for(let r=0;r<rows;r++){
-      for(let col=0;col<cols;col++){
-        const i=r*cols+col;
-        const beat=(Math.sin(t*(2.0+((i%4)*.05))*Math.PI*2*active+i*.85)+1)/2;
-        const alpha=.08+.34*beat;
-        x.fillStyle=visualColor(currentTrackSeed,i*9,alpha);
-        const scale=.78+.18*beat;
-        const ww=cw*scale,hh=ch*scale;
-        const xx=gap+col*(cw+gap)+(cw-ww)/2;
-        const yy=gap+r*(ch+gap)+(ch-hh)/2;
-        x.beginPath();
-        x.roundRect(xx,yy,ww,hh,10*dpr);
-        x.fill();
-      }
-    }
+    // HOUSE · mirrored mesh waves
+    drawNeonTerrain(x,w,h,t,energy,"house",true);
 
   }else if(visualModeIndex===5){
-    // DRUM & BASS · fast spectrum bars
-    const bars=46;
-    const bw=w/bars;
-    for(let i=0;i<bars;i++){
-      const speed=5.2+((i+currentTrackSeed)%8)*.16;
-      const v=.12+.88*((Math.sin(t*speed*active+i*.72+progress*18)+1)/2);
-      const bh=h*(.12+.72*Math.pow(v,1.65));
-      x.fillStyle=visualColor(currentTrackSeed,i*6,.22+.60*v);
-      x.fillRect(i*bw+1*dpr,h-bh,bw-2*dpr,bh);
-    }
-    x.strokeStyle="rgba(255,255,255,.18)";
-    x.lineWidth=1*dpr;
-    x.beginPath();x.moveTo(0,h*.50);x.lineTo(w,h*.50);x.stroke();
+    // DRUM & BASS · high-speed mesh landscape
+    drawNeonTerrain(x,w,h,t,energy,"dnb",false);
+    x.save();
+    x.globalAlpha=.42;
+    drawNeonTunnel(x,w,h,t*1.22,Math.min(1.35,energy*1.08));
+    x.restore();
 
   }else if(visualModeIndex===6){
     // JAZZ / SOUL · floating brass-like particles and arcs
     for(let i=0;i<24;i++){
       const p=((currentTrackSeed+i*97)%997)/997;
-      const drift=t*(.06+(i%5)*.009)*active;
+      const drift=t*(.11+(i%5)*.016)*active*motion;
       const px=w*((p+drift)%1);
-      const py=h*(.15+.72*((Math.sin(i*1.73+t*.22*active)+1)/2));
+      const py=h*(.15+.72*((Math.sin(i*1.73+t*.42*active*motion)+1)/2));
       const rr=(3+(i%4)*2)*dpr;
       x.fillStyle=visualColor(currentTrackSeed,28+i*8,.18+.045*(i%4));
       x.beginPath();x.arc(px,py,rr,0,Math.PI*2);x.fill();
@@ -761,7 +1044,7 @@ function drawMusicVisual(ts){
       x.lineWidth=(2+k*.7)*dpr;x.stroke();
     }
 
-  }else{
+  }else if(visualModeIndex===7){
     // CHILL / ACOUSTIC · strings + gentle light
     const rg=x.createRadialGradient(w*.30,h*.32,0,w*.30,h*.32,h*.55);
     rg.addColorStop(0,visualColor(currentTrackSeed,35,.20));
@@ -773,12 +1056,39 @@ function drawMusicVisual(ts){
       const amp=h*(.009+i*.0015);
       x.beginPath();
       for(let px=0;px<=w;px+=7*dpr){
-        const py=y+Math.sin(px/(85*dpr)+t*(.18+i*.012)*active+i*.5)*amp;
+        const py=y+Math.sin(px/(85*dpr)+t*(.26+i*.02)*active*motion+i*.5)*amp;
         if(px===0)x.moveTo(px,py); else x.lineTo(px,py);
       }
       x.strokeStyle=visualColor(currentTrackSeed,15+i*16,.13+i*.035);
       x.lineWidth=(1.1+i*.12)*dpr;x.stroke();
     }
+  }else if(visualModeIndex===8){
+    // TRAP / HIP-HOP · deforming neon mesh orb
+    drawNeonOrb(x,w,h,t,energy);
+    if(energy>.72){
+      x.save();
+      x.globalAlpha=.32;
+      drawNeonTunnel(x,w,h,t*.72,energy*.78);
+      x.restore();
+    }
+  }else{
+    // SCENE / WAVEFORM · calm atmospheric visual
+    drawSceneVisual(x,w,h,t,energy);
+  }
+
+  // Additional kinetic overlay for high-energy profiles.
+  if(energy>.62){
+    const scanY=((t*115*energy)%h);
+    x.fillStyle=`rgba(255,255,255,${Math.min(.055,.015+(energy-.62)*.06)})`;
+    x.fillRect(0,scanY,w,Math.max(1,2*dpr));
+
+    const cx=w*.5, cy=h*.5;
+    const pulseR=(Math.min(w,h)*(.18+((t*0.55*energy)%1)*.55));
+    x.beginPath();
+    x.arc(cx,cy,pulseR,0,Math.PI*2);
+    x.strokeStyle=visualColor(currentTrackSeed,210,Math.max(0,.12-((t*0.55*energy)%1)*.10));
+    x.lineWidth=1.2*dpr;
+    x.stroke();
   }
 
   // progress line shared by all modes
@@ -787,8 +1097,135 @@ function drawMusicVisual(ts){
   x.fillStyle="rgba(255,255,255,.72)";
   x.fillRect(w*.08,h*.92,w*.84*progress,2*dpr);
 
-  $("visualState").textContent=isPlaying?"En movimiento":"Pausado";
+  const energyLabel=visualEnergy>.88?"Alta":visualEnergy>.58?"Media":"Suave";
+  $("visualState").textContent=isPlaying?("Movimiento · "+energyLabel):"Pausado";
   if(visualRunning) visualRAF=requestAnimationFrame(drawMusicVisual);
+}
+
+
+function drawSceneVisual(ctx,w,h,t,energy){
+  // Atmospheric calm visual for reggae / dub / acoustic / chill.
+  const g=ctx.createLinearGradient(0,0,0,h);
+  g.addColorStop(0,"rgba(9,14,22,1)");
+  g.addColorStop(.52,"rgba(13,20,30,1)");
+  g.addColorStop(1,"rgba(6,10,16,1)");
+  ctx.fillStyle=g;
+  ctx.fillRect(0,0,w,h);
+
+  // Misty spotlight / beam.
+  const beamX=w*(.48+.04*Math.sin(t*.18));
+  const beamGrad=ctx.createLinearGradient(beamX,0,beamX,h);
+  beamGrad.addColorStop(0,"rgba(205,240,255,.06)");
+  beamGrad.addColorStop(.18,"rgba(220,250,255,.72)");
+  beamGrad.addColorStop(.50,"rgba(205,240,255,.18)");
+  beamGrad.addColorStop(1,"rgba(205,240,255,.03)");
+  ctx.fillStyle=beamGrad;
+  ctx.fillRect(beamX-w*.045,0,w*.09,h);
+
+  // Ground haze.
+  const haze=ctx.createRadialGradient(w*.45,h*.70,0,w*.45,h*.70,w*.48);
+  haze.addColorStop(0,"rgba(205,240,255,.10)");
+  haze.addColorStop(1,"rgba(205,240,255,0)");
+  ctx.fillStyle=haze;
+  ctx.fillRect(0,0,w,h);
+
+  // Tree silhouettes
+  function tree(xBase, widthScale, heightScale, alpha){
+    const trunkH=h*(.52+heightScale*.18);
+    const trunkW=Math.max(10,w*.018*widthScale);
+    const trunkY=h*.18;
+    ctx.fillStyle=`rgba(10,14,16,${alpha})`;
+    ctx.fillRect(xBase-trunkW/2,trunkY,trunkW,trunkH);
+    for(let i=0;i<5;i++){
+      const dir=(i%2===0?-1:1);
+      ctx.strokeStyle=`rgba(16,24,20,${alpha*.95})`;
+      ctx.lineWidth=Math.max(2,trunkW*.16);
+      ctx.beginPath();
+      ctx.moveTo(xBase,trunkY+h*(.08+i*.05));
+      ctx.quadraticCurveTo(
+        xBase+dir*w*(.03+.02*i),
+        trunkY+h*(.02+i*.03),
+        xBase+dir*w*(.06+.03*i),
+        trunkY-h*(.03)+h*(.05*i)
+      );
+      ctx.stroke();
+    }
+    // Leaves / canopy
+    ctx.fillStyle=`rgba(18,28,24,${alpha*.9})`;
+    for(let j=0;j<7;j++){
+      const rx=w*(.03+.01*(j%3))*widthScale;
+      const ry=h*(.06+.015*(j%2))*heightScale;
+      const cx=xBase + (j-3)*w*.013;
+      const cy=trunkY+h*(.02+j*.02);
+      ctx.beginPath();
+      ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);
+      ctx.fill();
+    }
+  }
+  tree(w*.16,1.2,1.1,.88);
+  tree(w*.31,1.4,1.2,.82);
+  tree(w*.63,1.15,1.1,.78);
+  tree(w*.82,1.35,1.22,.86);
+
+  // Floor details
+  ctx.fillStyle="rgba(26,34,28,.84)";
+  ctx.beginPath();
+  ctx.moveTo(0,h*.78);
+  for(let x=0;x<=w;x+=w/10){
+    ctx.lineTo(x,h*.78 + Math.sin(x/w*8+t*.18)*h*.018);
+  }
+  ctx.lineTo(w,h);
+  ctx.lineTo(0,h);
+  ctx.closePath();
+  ctx.fill();
+
+  // Subtle particles
+  ctx.save();
+  ctx.globalCompositeOperation="lighter";
+  for(let i=0;i<44;i++){
+    const p=((currentTrackSeed+i*37)%997)/997;
+    const px=(p*w + (t*(5+i%4)*energy*7))%w;
+    const py=h*(.08+((i*23)%100)/100*.72) + Math.sin(t*.35+i)*h*.01;
+    const r=(i%3===0?2.1:1.1)*(window.devicePixelRatio||1);
+    ctx.fillStyle=`rgba(255,255,255,${.12 + (i%4)*.05})`;
+    ctx.beginPath(); ctx.arc(px,py,r,0,Math.PI*2); ctx.fill();
+  }
+  ctx.restore();
+
+  // Center waveform line
+  const yMid=h*.50;
+  ctx.strokeStyle="rgba(255,255,255,.85)";
+  ctx.lineWidth=1.4*Math.min(2,window.devicePixelRatio||1);
+  ctx.beginPath();
+  for(let i=0;i<=170;i++){
+    const x=i/170*w;
+    const env=Math.exp(-Math.pow((i-85)/34,2))*1.1 + .13;
+    const fast=Math.sin(i*.48+t*(2.2+energy*2.2))*0.55;
+    const slow=Math.sin(i*.09+t*(0.8+energy))*0.45;
+    const amp=(fast+slow)*env*h*(.03+.035*energy);
+    const y=yMid+amp;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  // Ticks around waveform for a music-reactive feel
+  for(let i=0;i<110;i++){
+    const x=i/109*w;
+    const env=Math.exp(-Math.pow((i-54.5)/20,2));
+    const a=(.01+.026*env*(.55+.45*Math.sin(i*.7+t*(2.7+energy*2.0))));
+    ctx.strokeStyle="rgba(255,255,255,.9)";
+    ctx.lineWidth=1*Math.min(2,window.devicePixelRatio||1);
+    ctx.beginPath();
+    ctx.moveTo(x,yMid-a*h);
+    ctx.lineTo(x,yMid+a*h);
+    ctx.stroke();
+  }
+
+  // Optional calm title echoes inside the canvas, but discreet.
+  ctx.fillStyle="rgba(255,255,255,.14)";
+  ctx.textAlign="center";
+  ctx.font=`700 ${Math.max(18,Math.round(w*.042))}px sans-serif`;
+  ctx.fillText("Scene Visual",w*.5,h*.22);
 }
 
 function startVisualizer(){
@@ -971,6 +1408,13 @@ async function loadWeather(){
     $("weatherLocation").textContent=weatherConfig.label||"Ubicación guardada";
     $("weatherUpdated").textContent="Actualizado "+new Date().toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit"});
     $("weatherMsg").textContent="Clima actualizado automáticamente cada 15 min.";
+    lastWeatherSnapshot={
+      temp:Math.round(c.temperature_2m),
+      feels:Math.round(c.apparent_temperature),
+      condition:WEATHER_CODES[c.weather_code]||"Condición "+c.weather_code,
+      rain:(day.precipitation_probability_max?.[0] ?? 0)
+    };
+    renderContextPanel();
   }catch(e){
     $("weatherMsg").textContent="No pude actualizar el clima. Verifica la conexión.";
   }
@@ -1041,6 +1485,8 @@ function renderPending(data){
   $("pendingUpdated").textContent=updatedText;
   $("pendingMiniStatus").textContent=s.totalOpen+" abiertos · "+s.overdue+" vencido"+(s.overdue===1?"":"s");
   $("pendingState").textContent="Sincronizado";
+  lastPendingSummary=s;
+  renderContextPanel();
 
   const rank={high:0,medium:1,low:2};
   items.sort((a,b)=>{
@@ -1106,6 +1552,132 @@ async function loadPending(){
   }
 }
 
+
+function isTrafficTime(){
+  return new Date().getHours()>=14;
+}
+
+function renderMorningBrief(){
+  const w=lastWeatherSnapshot;
+  const p=lastPendingSummary;
+  $("briefWeather").textContent=w ? `${w.temp}° · ${w.condition}` : "—";
+  $("briefHigh").textContent=p ? p.highPriority : "—";
+  $("briefOverdue").textContent=p ? p.overdue : "—";
+
+  let headline="Día en control";
+  let detail="Sin alertas críticas cargadas todavía.";
+
+  if(p && p.overdue>0){
+    headline=`${p.overdue} pendiente${p.overdue===1?"":"s"} vencido${p.overdue===1?"":"s"} requiere${p.overdue===1?"":"n"} atención`;
+    detail=`Hay ${p.highPriority} de prioridad alta.`;
+  }else if(p && p.highPriority>0){
+    headline=`${p.highPriority} pendiente${p.highPriority===1?"":"s"} de prioridad alta`;
+    detail="No hay vencidos en este momento.";
+  }else if(p){
+    headline=`${p.totalOpen} pendientes abiertos`;
+    detail="Sin vencidos ni alertas de prioridad alta.";
+  }
+
+  if(w){
+    detail += ` Clima: ${w.condition.toLowerCase()}, ${w.temp}°C`;
+    if(Number(w.rain)>=40) detail += ` y ${w.rain}% de probabilidad de lluvia`;
+    detail += ".";
+  }
+
+  $("briefHeadline").textContent=headline;
+  $("briefDetail").textContent=detail;
+}
+
+function trafficEndpoint(){
+  return (localStorage.getItem(TRAFFIC_ENDPOINT_KEY)||TRAFFIC_DEFAULT_ENDPOINT).trim();
+}
+
+function renderContextPanel(){
+  const traffic=isTrafficTime();
+  $("morningBriefPanel").classList.toggle("hidden",traffic);
+  $("trafficPanel").classList.toggle("hidden",!traffic);
+  if(!traffic) renderMorningBrief();
+}
+
+function parseTrafficLevel(delay){
+  if(delay<=5) return {label:"Fluido",cls:"traffic-level-normal"};
+  if(delay<=15) return {label:"Moderado",cls:"traffic-level-medium"};
+  return {label:"Pesado",cls:"traffic-level-heavy"};
+}
+
+async function loadTraffic(){
+  renderContextPanel();
+  if(!isTrafficTime()) return;
+
+  const endpoint=trafficEndpoint();
+  if(!endpoint){
+    $("trafficStatus").textContent="Falta configurar el endpoint de Google Routes en Ajustes.";
+    $("trafficUpdated").textContent="Sin configurar";
+    return;
+  }
+
+  $("trafficStatus").textContent="Consultando tráfico en tiempo real…";
+  $("trafficBadge").textContent="Actualizando";
+  $("trafficBadge").className="context-chip";
+
+  try{
+    const sep=endpoint.includes("?")?"&":"?";
+    const r=await fetch(endpoint+sep+"api=traffic&_="+Date.now(),{cache:"no-store",redirect:"follow"});
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    const d=await r.json();
+    if(!d.ok) throw new Error(d.error||"Respuesta inválida");
+
+    const mins=Math.round(Number(d.durationMinutes)||0);
+    const delay=Math.max(0,Math.round(Number(d.delayMinutes)||0));
+    const level=parseTrafficLevel(delay);
+
+    $("trafficDuration").textContent=mins+" min";
+    $("trafficDelay").textContent=delay>0 ? "+"+delay+" min" : "Sin demora";
+    $("trafficDistance").textContent=Number.isFinite(Number(d.distanceKm)) ? Number(d.distanceKm).toFixed(1)+" km" : "—";
+
+    const arrival=d.arrivalTime ? new Date(d.arrivalTime) : new Date(Date.now()+mins*60000);
+    $("trafficArrival").textContent=arrival.toLocaleTimeString("es-MX",{hour:"numeric",minute:"2-digit",hour12:true}).toLowerCase();
+
+    $("trafficStatus").textContent=`${level.label} · tiempo estimado con tráfico actual`;
+    $("trafficStatus").className="traffic-status "+level.cls;
+    $("trafficBadge").textContent=level.label;
+    $("trafficBadge").className="context-chip "+level.cls;
+    $("trafficUpdated").textContent="Actualizado "+new Date().toLocaleTimeString("es-MX",{hour:"numeric",minute:"2-digit",hour12:true}).toLowerCase();
+  }catch(e){
+    console.error("Tráfico",e);
+    $("trafficStatus").textContent="No pude obtener el tráfico. Revisa el Apps Script o la API.";
+    $("trafficUpdated").textContent="Error de conexión";
+    $("trafficBadge").textContent="Sin datos";
+    $("trafficBadge").className="context-chip traffic-level-heavy";
+  }
+}
+
+function loadTrafficEndpointSetting(){
+  const endpoint=trafficEndpoint();
+  $("trafficEndpointInput").value=endpoint;
+  $("trafficConfigMsg").textContent=endpoint
+    ? "Google Routes configurado. Se consulta cada 15 min después de las 2:00 pm."
+    : "Usando el endpoint predeterminado del proyecto.";
+}
+
+function saveTrafficEndpoint(){
+  const v=$("trafficEndpointInput").value.trim();
+  if(!v){
+    localStorage.removeItem(TRAFFIC_ENDPOINT_KEY);
+    $("trafficEndpointInput").value=TRAFFIC_DEFAULT_ENDPOINT;
+    $("trafficConfigMsg").textContent="Restaurado el endpoint predeterminado.";
+    loadTraffic();
+    return;
+  }
+  if(!/^https:\/\/script\.google\.com\/macros\/s\//i.test(v)){
+    $("trafficConfigMsg").textContent="La URL no parece ser un Web App de Google Apps Script.";
+    return;
+  }
+  localStorage.setItem(TRAFFIC_ENDPOINT_KEY,v);
+  $("trafficConfigMsg").textContent="Endpoint guardado.";
+  loadTraffic();
+}
+
 $("loginBtn").addEventListener("click",login);
 $("refreshBtn").addEventListener("click",loadPlayback);
 $("logoutBtn").addEventListener("click",logout);
@@ -1119,6 +1691,9 @@ $("weatherRefreshBtn").addEventListener("click",loadWeather);
 $("pendingRefreshBtn").addEventListener("click",loadPending);
 $("pendingMoreBtn").addEventListener("click",()=>{pendingExpanded=!pendingExpanded;renderPendingItems();});
 $("visualShell").addEventListener("click",cycleVisualMode);
+$("trafficRefreshBtn").addEventListener("click",loadTraffic);
+$("trafficEndpointSaveBtn").addEventListener("click",saveTrafficEndpoint);
+$("mapsOpenBtn").href=TRAFFIC_MAPS_URL;
 document.addEventListener("visibilitychange",()=>{
   if(!document.hidden && !$("playerPanel").classList.contains("hidden")) restartVisualizer();
 });
@@ -1130,6 +1705,14 @@ document.addEventListener("visibilitychange",()=>{
 
   loadPending();
   pendingTimer=setInterval(loadPending,PENDING_REFRESH_MS);
+
+  loadTrafficEndpointSetting();
+  renderContextPanel();
+  loadTraffic();
+  trafficTimer=setInterval(()=>{
+    renderContextPanel();
+    if(isTrafficTime()) loadTraffic();
+  },TRAFFIC_REFRESH_MS);
 
   const params=new URLSearchParams(location.search);
   const code=params.get("code");
