@@ -83,16 +83,71 @@ input{min-width:0;flex:1;background:#111318;color:var(--text);border:1px solid v
 .pending-more-btn{min-height:42px;padding:10px 18px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-weight:700;cursor:pointer}
 .pending-more-btn:hover{background:#292d35}
 
+
+.mini-title{font-size:20px;font-weight:700;margin-top:4px}
+.spotify-card{min-height:auto}
+.compact-side{display:grid;gap:14px;align-content:start}
+.panel-block{background:var(--panel2);border-radius:20px;padding:16px}
+.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.small-btn{padding:10px 12px;border-radius:12px;font-size:13px}
+.small-status{padding:8px 10px;font-size:12px}
+.compact-weather .temp{font-size:46px}
+.compact-weather .condition{font-size:14px}
+.compact-metrics{gap:8px;margin-top:12px}
+.compact-metrics .metric{padding:11px 12px}
+.compact-metrics .metric .v{font-size:16px}
+.compact-settings{margin-top:0;padding-top:0;border-top:0}
+.config-details{border:1px solid var(--line);border-radius:18px;padding:0 16px 10px;background:#14171d}
+.config-details summary{cursor:pointer;list-style:none;padding:14px 0;font-weight:700;color:var(--text)}
+.config-details summary::-webkit-details-marker{display:none}
+.pending-card{margin-top:0}
+.compact-pending-head{align-items:flex-start}
+.compact-summary{gap:8px;margin-top:12px}
+.compact-summary .pending-kpi{padding:10px 11px}
+.compact-summary .pending-kpi .n{font-size:22px}
+.compact-pending-list{gap:8px;margin-top:12px}
+.compact-pending-list .pending-item{padding:10px 12px}
+.compact-pending-list .pending-name{font-size:14px}
+.compact-pending-list .pending-meta{font-size:11px;gap:6px 8px}
+.compact-pending-list .pending-actions a{min-height:34px;padding:7px 10px;font-size:11px}
+main{max-width:1280px;padding:16px}
+.top{align-items:center;gap:14px}
+#clock{font-size:clamp(52px,6.2vw,82px)}
+#date{font-size:14px;margin-top:6px}
+.status{padding:8px 12px;font-size:13px}
+.grid{grid-template-columns:1.05fr .95fr;gap:14px;margin-top:14px;align-items:start}
+.card{padding:18px;border-radius:24px}
+.spotify{grid-template-columns:138px 1fr;gap:16px;align-items:start}
+#cover{border-radius:18px}
+h1{font-size:clamp(22px,2.4vw,34px);line-height:1.05;margin:6px 0}
+.artist{font-size:16px}
+.device{font-size:13px;margin-top:6px}
+.bar{height:7px;margin-top:14px}
+.times{font-size:11px;margin-top:5px}
+.controls{gap:7px;margin-top:12px}
+.controls button{padding:10px 12px;font-size:14px;border-radius:12px}
+button{padding:11px 13px}
+.note{font-size:12px}
+.location{font-size:12px;margin-top:5px}
+.metric{border-radius:14px}
+.weather-main{gap:10px;margin-top:8px}
+.pending-updated{font-size:11px}
+.pending-empty{font-size:12px;margin-top:8px}
+.pending-more-wrap{margin-top:10px}
+.pending-more-btn{min-height:38px;padding:8px 14px;font-size:13px}
+
 @media(max-width:820px){
   .pending-summary{grid-template-columns:1fr 1fr}
   .pending-item{grid-template-columns:1fr}
   .pending-actions{justify-content:flex-start}
-}
-
-@media(max-width:820px){
   .grid{grid-template-columns:1fr}
   .spotify{grid-template-columns:1fr}
-  #cover{max-width:360px;margin:auto}
+  #cover{max-width:220px;margin:auto}
+  main{padding:14px}
+  .panel-block{padding:14px}
+  .compact-side{gap:12px}
+  #clock{font-size:48px}
+  .controls{justify-content:flex-start}
 }
 </style>
 </head>
@@ -107,7 +162,7 @@ input{min-width:0;flex:1;background:#111318;color:var(--text);border:1px solid v
   </div>
 
   <div class="grid">
-    <section class="card">
+    <section class="card spotify-card">
       <div id="loginPanel">
         <div class="eyebrow">Spotify</div>
         <h1>Conecta tu cuenta</h1>
@@ -137,74 +192,59 @@ input{min-width:0;flex:1;background:#111318;color:var(--text);border:1px solid v
       </div>
     </section>
 
-    <aside class="card">
-      <div class="eyebrow">Clima</div>
-      <div class="weather-main">
-        <div>
-          <div id="temperature" class="temp">--°</div>
-          <div id="weatherLocation" class="location">Configura tu ubicación</div>
-        </div>
-        <div>
-          <div id="weatherCondition" class="condition">—</div>
-          <div id="weatherUpdated" class="note" style="text-align:right;margin-top:5px"></div>
-        </div>
-      </div>
-
-      <div class="metric-grid">
-        <div class="metric">
-          <div class="eyebrow">Sensación</div>
-          <div id="feels" class="v">—</div>
-        </div>
-        <div class="metric">
-          <div class="eyebrow">Máx / mín</div>
-          <div id="maxmin" class="v">—</div>
-        </div>
-        <div class="metric">
-          <div class="eyebrow">Lluvia</div>
-          <div id="rain" class="v">—</div>
-        </div>
-        <div class="metric">
-          <div class="eyebrow">Viento</div>
-          <div id="wind" class="v">—</div>
-        </div>
-      </div>
-
-      <div class="settings">
-        <div class="eyebrow">Ubicación del clima</div>
-        <div class="settings-row" style="margin-top:9px">
-          <input id="cityInput" autocomplete="off" placeholder="Ej. Cadereyta Jiménez, Nuevo León">
-          <button id="cityBtn">Buscar</button>
-        </div>
-        <div class="settings-row" style="margin-top:8px">
-          <button id="geoBtn" class="secondary">Usar mi ubicación</button>
-          <button id="weatherRefreshBtn" class="secondary">Actualizar clima</button>
-        </div>
-        <div id="weatherMsg" class="note" style="margin-top:9px">Open-Meteo · sin clave API.</div>
-      </div>
-
-      <div class="settings">
-        <div class="eyebrow">Pendientes</div>
-        <div class="note" style="margin-top:7px">Sincronizados desde Google Apps Script.</div>
-        <div class="settings-row" style="margin-top:9px">
-          <button id="pendingRefreshBtn" class="secondary">Actualizar pendientes</button>
-        </div>
-        <div id="pendingMiniStatus" class="note" style="margin-top:9px">Conectando…</div>
-      </div>
-    </aside>
-
-  </div>
-
-  <section class="card pending-card">
-    <div class="pending-head">
+    
+<aside class="card compact-side">
+  <section class="panel-block weather-block">
+    <div class="panel-head">
       <div>
-        <div class="eyebrow">Pendientes · Integración en vivo</div>
-        <div class="pending-title">Qué requiere atención</div>
-        <div id="pendingUpdated" class="pending-updated">—</div>
+        <div class="eyebrow">Clima</div>
+        <div class="mini-title">Condiciones actuales</div>
       </div>
-      <div id="pendingState" class="status">Conectando…</div>
+      <button id="weatherRefreshBtn" class="secondary small-btn">Actualizar</button>
     </div>
 
-    <div class="pending-summary">
+    <div class="weather-main compact-weather">
+      <div>
+        <div id="temperature" class="temp">--°</div>
+        <div id="weatherLocation" class="location">Configura tu ubicación</div>
+      </div>
+      <div>
+        <div id="weatherCondition" class="condition">—</div>
+        <div id="weatherUpdated" class="note" style="text-align:right;margin-top:5px"></div>
+      </div>
+    </div>
+
+    <div class="metric-grid compact-metrics">
+      <div class="metric">
+        <div class="eyebrow">Sensación</div>
+        <div id="feels" class="v">—</div>
+      </div>
+      <div class="metric">
+        <div class="eyebrow">Máx / mín</div>
+        <div id="maxmin" class="v">—</div>
+      </div>
+      <div class="metric">
+        <div class="eyebrow">Lluvia</div>
+        <div id="rain" class="v">—</div>
+      </div>
+      <div class="metric">
+        <div class="eyebrow">Viento</div>
+        <div id="wind" class="v">—</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel-block pending-block">
+    <div class="pending-head compact-pending-head">
+      <div>
+        <div class="eyebrow">Pendientes</div>
+        <div class="mini-title">Qué requiere atención</div>
+        <div id="pendingUpdated" class="pending-updated">—</div>
+      </div>
+      <div id="pendingState" class="status small-status">Conectando…</div>
+    </div>
+
+    <div class="pending-summary compact-summary">
       <div class="pending-kpi">
         <div class="eyebrow">Abiertos</div>
         <div id="pendingTotal" class="n">—</div>
@@ -214,21 +254,48 @@ input{min-width:0;flex:1;background:#111318;color:var(--text);border:1px solid v
         <div id="pendingOverdue" class="n">—</div>
       </div>
       <div class="pending-kpi">
-        <div class="eyebrow">Vencen hoy</div>
+        <div class="eyebrow">Hoy</div>
         <div id="pendingToday" class="n">—</div>
       </div>
       <div class="pending-kpi high">
-        <div class="eyebrow">Prioridad alta</div>
+        <div class="eyebrow">Alta</div>
         <div id="pendingHigh" class="n">—</div>
       </div>
     </div>
 
-    <div id="pendingList" class="pending-list"></div>
+    <div id="pendingList" class="pending-list compact-pending-list"></div>
     <div id="pendingEmpty" class="pending-empty hidden">No hay pendientes activos.</div>
     <div id="pendingMoreWrap" class="pending-more-wrap hidden">
       <button id="pendingMoreBtn" class="pending-more-btn" type="button">Ver todos los pendientes</button>
     </div>
   </section>
+
+  <details class="config-details">
+    <summary>Ajustes</summary>
+    <div class="settings compact-settings">
+      <div class="eyebrow">Ubicación del clima</div>
+      <div class="settings-row" style="margin-top:9px">
+        <input id="cityInput" autocomplete="off" placeholder="Ej. Cadereyta Jiménez, Nuevo León">
+        <button id="cityBtn">Buscar</button>
+      </div>
+      <div class="settings-row" style="margin-top:8px">
+        <button id="geoBtn" class="secondary">Usar mi ubicación</button>
+      </div>
+      <div id="weatherMsg" class="note" style="margin-top:9px">Open-Meteo · sin clave API.</div>
+    </div>
+
+    <div class="settings compact-settings">
+      <div class="eyebrow">Pendientes</div>
+      <div class="settings-row" style="margin-top:9px">
+        <button id="pendingRefreshBtn" class="secondary">Actualizar pendientes</button>
+      </div>
+      <div id="pendingMiniStatus" class="note" style="margin-top:9px">Conectando…</div>
+    </div>
+  </details>
+</aside>
+
+
+  </div>
 </main>
 
 <script>
@@ -540,7 +607,7 @@ function renderPending(data){
 function renderPendingItems(){
   const items=pendingItemsCache||[];
   $("pendingEmpty").classList.toggle("hidden",items.length!==0);
-  const visible=pendingExpanded ? items : items.slice(0,4);
+  const visible=pendingExpanded ? items : items.slice(0,3);
 
   $("pendingList").innerHTML=visible.map(item=>{
     const overdue=isOverdue(item);
