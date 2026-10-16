@@ -1,4 +1,4 @@
-const CACHE='matepad-desk-v18';
+const CACHE='matepad-desk-v21';
 const ASSETS=[
   './',
   './index.html',

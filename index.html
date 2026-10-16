@@ -550,7 +550,7 @@ main{max-width:1360px;padding:10px 14px}
 .spotify-transport-row button{min-height:48px!important;padding:8px 10px!important;font-size:19px!important;border-radius:13px!important}
 .spotify-transport-row #playBtn{font-size:23px!important}
 .exec-brief{margin-top:9px}
-.market-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.market-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
 .market-item{background:var(--panel2);border-radius:12px;padding:9px 10px;min-width:0}
 .market-item span{display:block;font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 .market-item strong{display:block;margin-top:3px;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -561,8 +561,85 @@ main{max-width:1360px;padding:10px 14px}
 .agenda-title{font-size:13px;font-weight:700;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .signal-text{font-size:14px;font-weight:720;line-height:1.25;margin-top:5px}
 .market-up{color:#ff9d9d!important}.market-down{color:#8ed6a5!important}.market-flat{color:var(--muted)!important}
-@media (orientation:portrait){.market-strip{grid-template-columns:repeat(3,minmax(0,1fr))}.brief-lower{grid-template-columns:1fr 1fr}}
+@media (orientation:portrait){.market-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.brief-lower{grid-template-columns:1fr 1fr}}
 @media (max-width:620px){.market-strip{grid-template-columns:1fr}.brief-lower{grid-template-columns:1fr}.spotify-transport-row button{min-height:46px!important}}
+
+
+/* V19 · Disponibilidad de flota en Morning Brief */
+.availability-card{
+  background:var(--panel2);
+  border-radius:12px;
+  padding:9px 10px;
+  min-width:0;
+}
+.availability-main-row{
+  display:grid;
+  grid-template-columns:minmax(105px,.42fr) minmax(0,1.58fr);
+  gap:10px;
+  align-items:center;
+  margin-top:5px;
+}
+.availability-value{
+  font-size:31px;
+  font-weight:800;
+  line-height:1;
+  letter-spacing:-.04em;
+}
+.availability-mini-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;
+}
+.availability-mini-grid>div{
+  background:rgba(255,255,255,.035);
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:6px 7px;
+  min-width:0;
+}
+.availability-mini-grid span{
+  display:block;
+  font-size:7.5px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.availability-mini-grid strong{
+  display:block;
+  font-size:14px;
+  margin-top:2px;
+}
+.availability-op{
+  margin-top:7px;
+  padding-top:6px;
+  border-top:1px solid var(--line);
+  font-size:10px;
+  color:var(--muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.availability-good{color:#8ed6a5!important}
+.availability-warn{color:#f1cf76!important}
+.availability-bad{color:#ff9d9d!important}
+@media (orientation:portrait){
+  .availability-main-row{grid-template-columns:minmax(100px,.38fr) minmax(0,1.62fr)}
+}
+@media (max-width:620px){
+  .availability-main-row{grid-template-columns:1fr}
+}
+
+
+.market-source-line{
+  margin-top:5px;
+  font-size:7.5px;
+  color:var(--muted);
+  text-align:right;
+  opacity:.82;
+}
 
 </style>
 </head>
@@ -629,28 +706,57 @@ main{max-width:1360px;padding:10px 14px}
         <div class="context-head">
           <div>
             <div class="eyebrow">Morning Brief</div>
-            <div class="context-title">Mercados · Agenda · Señal LMT</div>
+            <div class="context-title">Mercados · Disponibilidad · Señal LMT</div>
           </div>
           <div id="briefStamp" class="context-chip">Antes de 2:00 pm</div>
         </div>
 
         <div class="exec-brief">
           <div class="market-strip">
-            <div class="market-item"><span>WTI</span><strong id="briefWTI">Sin fuente</strong><em id="briefWTIChange">—</em></div>
-            <div class="market-item"><span>USD/MXN</span><strong id="briefFX">Sin fuente</strong><em id="briefFXChange">—</em></div>
-            <div class="market-item"><span>Diésel / energía</span><strong id="briefDiesel">Sin fuente</strong><em id="briefDieselChange">—</em></div>
+            <div class="market-item">
+              <span>Diésel ref.</span>
+              <strong id="briefDiesel">Sin fuente</strong>
+              <em id="briefDieselChange">—</em>
+            </div>
+            <div class="market-item">
+              <span>USD/MXN</span>
+              <strong id="briefFX">Sin fuente</strong>
+              <em id="briefFXChange">—</em>
+            </div>
+            <div class="market-item">
+              <span>Brent</span>
+              <strong id="briefBrent">Sin fuente</strong>
+              <em id="briefBrentChange">—</em>
+            </div>
+            <div class="market-item">
+              <span>IEPS diésel</span>
+              <strong id="briefIEPS">Sin fuente</strong>
+              <em id="briefIEPSChange">—</em>
+            </div>
+          </div>
+          <div class="market-source-line">
+            Mercados: internet directo · Croncopia + OpenVan.camp · IEPS: DOF/SIDOF
           </div>
           <div class="brief-lower">
-            <div class="agenda-card">
-              <div class="eyebrow">Agenda</div>
-              <div id="briefAgendaTime" class="agenda-time">—</div>
-              <div id="briefAgendaTitle" class="agenda-title">Sin agenda conectada</div>
-              <div id="briefAgendaMeta" class="brief-detail">Conectaremos Google Calendar para mostrar la próxima reunión.</div>
+            <div class="availability-card">
+              <div class="eyebrow">Disponibilidad de flota</div>
+              <div class="availability-main-row">
+                <div>
+                  <div id="briefAvailability" class="availability-value">—</div>
+                  <div id="briefAvailabilityGap" class="brief-detail">Meta 97%</div>
+                </div>
+                <div class="availability-mini-grid">
+                  <div><span>Indisponibles</span><strong id="briefUnavailable">—</strong></div>
+                  <div><span>Reparación</span><strong id="briefRepair">—</strong></div>
+                  <div><span>Espera</span><strong id="briefWait">—</strong></div>
+                </div>
+              </div>
+              <div id="briefWeakestOp" class="availability-op">Operativa crítica: —</div>
             </div>
             <div class="signal-card">
               <div class="eyebrow">Señal LMT</div>
-              <div id="briefSignal" class="signal-text">Sin fuente de indicadores conectada.</div>
-              <div id="briefSignalMeta" class="brief-detail">Una sola alerta ejecutiva accionable, sin repetir clima ni pendientes.</div>
+              <div id="briefSignal" class="signal-text">Esperando disponibilidad de flota.</div>
+              <div id="briefSignalMeta" class="brief-detail">La señal se genera con disponibilidad actual y la operativa de mayor impacto.</div>
             </div>
           </div>
         </div>
@@ -786,12 +892,12 @@ main{max-width:1360px;padding:10px 14px}
     </div>
 
     <div class="settings compact-settings">
-      <div class="eyebrow">Morning Brief · fuentes</div>
+      <div class="eyebrow">Morning Brief · Disponibilidad PROD</div>
       <div class="settings-row" style="margin-top:9px">
-        <input id="briefEndpointInput" autocomplete="off" placeholder="URL del Apps Script del Morning Brief">
-        <button id="briefEndpointSaveBtn" type="button">Guardar</button>
+        <input id="availabilityEndpointInput" autocomplete="off" placeholder="URL PROD de Mantenimiento ?api=matepadbrief">
+        <button id="availabilityEndpointSaveBtn" type="button">Guardar</button>
       </div>
-      <div id="briefConfigMsg" class="note" style="margin-top:9px">Sin fuente conectada. No se mostrarán datos inventados.</div>
+      <div id="availabilityConfigMsg" class="note" style="margin-top:9px">Solo lectura desde Mantenimiento PROD.</div>
     </div>
 
     <div class="settings compact-settings">
@@ -816,7 +922,14 @@ const SCOPES="user-read-currently-playing user-read-playback-state user-modify-p
 const PENDING_ENDPOINT="https://script.google.com/macros/s/AKfycbye1Kb1GRyUHtLZWxGXzv407JLcIroV5fsUTQzUbpJ7hHUk1aRsj3GoIXVIiNel2XilOg/exec?api=matepad";
 const PENDING_REFRESH_MS=5*60*1000;
 const TRAFFIC_REFRESH_MS=15*60*1000;
-const BRIEF_ENDPOINT_KEY="matepad_brief_endpoint";
+const AVAILABILITY_ENDPOINT_KEY="matepad_availability_endpoint";
+const DIRECT_MARKET_REFRESH_MS=30*60*1000;
+const MARKET_URLS={
+  fx:"https://croncopia.com/api/exchange/MXN.json",
+  brent:"https://croncopia.com/api/energy/brent_crude.json",
+  fuel:"https://openvan.camp/api/fuel/prices?source=eriknoga06.github.io",
+  sidofSearch:"https://sidof.segob.gob.mx/dof/sidof/buscarNotas/titulo/cuotas%20disminuidas/1/10/fecha/desc"
+};
 const TRAFFIC_ENDPOINT_KEY="matepad_traffic_endpoint";
 const TRAFFIC_DEFAULT_ENDPOINT="https://script.google.com/macros/s/AKfycbytGXbRyMDpsj-fYzWTVQiy-J34wcWrAJdpOiJTDiKqyCGJyK06HBjp4LKJvW_ch1vdYA/exec";
 const TRAFFIC_ORIGIN_LABEL="LM Transportaciones";
@@ -1840,54 +1953,243 @@ async function loadPending(){
 }
 
 
-function briefEndpoint(){
-  return (localStorage.getItem(BRIEF_ENDPOINT_KEY)||"").trim();
+function availabilityEndpoint(){
+  return (localStorage.getItem(AVAILABILITY_ENDPOINT_KEY)||"https://script.google.com/macros/s/AKfycbz1M1PpOIDucHKfJyQzKPMZjbesQ6DZpT7c0QKCLKyPCnRzTZ5iLPEIe9woQNME4KPd/exec?api=matepadbrief").trim();
 }
-function setMarketValue(valueId,changeId,item){
-  const value=item?.value ?? "—";
-  const change=item?.change ?? "—";
-  const direction=item?.direction || "flat";
-  $(valueId).textContent=value;
-  $(changeId).textContent=change;
+
+
+function marketCardSet(valueId,changeId,value,meta,direction){
+  $(valueId).textContent=value ?? "Sin dato";
+  $(changeId).textContent=meta || "—";
   $(changeId).className=direction==="up"?"market-up":direction==="down"?"market-down":"market-flat";
 }
-function renderExecutiveBriefData(d){
-  setMarketValue("briefWTI","briefWTIChange",d?.markets?.wti);
-  setMarketValue("briefFX","briefFXChange",d?.markets?.usdmxn);
-  setMarketValue("briefDiesel","briefDieselChange",d?.markets?.diesel);
-  $("briefAgendaTime").textContent=d?.agenda?.time || "—";
-  $("briefAgendaTitle").textContent=d?.agenda?.title || "Sin agenda conectada";
-  $("briefAgendaMeta").textContent=d?.agenda?.meta || "Conectaremos Google Calendar para mostrar la próxima reunión.";
-  $("briefSignal").textContent=d?.signal?.text || "Sin fuente de indicadores conectada.";
-  $("briefSignalMeta").textContent=d?.signal?.meta || "Una sola alerta ejecutiva accionable, sin repetir clima ni pendientes.";
+
+function ageLabel(iso){
+  if(!iso) return "";
+  const d=new Date(iso);
+  if(Number.isNaN(d.getTime())) return "";
+  return d.toLocaleString("es-MX",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
 }
-async function loadExecutiveBrief(){
-  if(isTrafficTime()) return;
-  const endpoint=briefEndpoint();
-  if(!endpoint){renderExecutiveBriefData(null);return;}
+
+function directMarketCacheRead(){
   try{
-    const sep=endpoint.includes("?")?"&":"?";
-    const r=await fetch(endpoint+sep+"api=brief&_="+Date.now(),{cache:"no-store",redirect:"follow"});
-    if(!r.ok) throw new Error("HTTP "+r.status);
-    const d=await r.json();
-    if(!d.ok) throw new Error(d.error||"Respuesta inválida");
-    renderExecutiveBriefData(d);
+    const raw=localStorage.getItem("matepad_direct_markets_cache");
+    return raw?JSON.parse(raw):null;
+  }catch(e){ return null; }
+}
+
+function directMarketCacheWrite(data){
+  try{ localStorage.setItem("matepad_direct_markets_cache",JSON.stringify(data)); }catch(e){}
+}
+
+function directionFromPrevious(key,value){
+  try{
+    const cache=directMarketCacheRead();
+    const prev=Number(cache?.values?.[key]);
+    if(!Number.isFinite(prev) || !Number.isFinite(Number(value))) return "flat";
+    const v=Number(value);
+    if(v>prev) return "up";
+    if(v<prev) return "down";
+    return "flat";
+  }catch(e){ return "flat"; }
+}
+
+async function fetchJson(url){
+  const r=await fetch(url,{cache:"no-store",credentials:"omit"});
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  return await r.json();
+}
+
+async function fetchDirectFx(){
+  const d=await fetchJson(MARKET_URLS.fx);
+  const rate=Number(d?.rate ?? d?.price ?? d?.value ?? d?.MXN);
+  if(!Number.isFinite(rate)) throw new Error("USD/MXN inválido");
+  return {
+    value:"$"+rate.toFixed(4),
+    raw:rate,
+    meta:"Directo · "+ageLabel(d?.timestamp),
+    direction:directionFromPrevious("fx",rate)
+  };
+}
+
+async function fetchDirectBrent(){
+  const d=await fetchJson(MARKET_URLS.brent);
+  const price=Number(d?.price);
+  if(!Number.isFinite(price)) throw new Error("Brent inválido");
+  return {
+    value:"$"+price.toFixed(2)+"/bbl",
+    raw:price,
+    meta:"Directo · "+ageLabel(d?.timestamp),
+    direction:directionFromPrevious("brent",price)
+  };
+}
+
+async function fetchDirectDieselMX(){
+  const d=await fetchJson(MARKET_URLS.fuel);
+  const mx=d?.data?.MX || d?.data?.mx;
+  if(!mx) throw new Error("México no disponible");
+  const price=Number(mx?.prices?.diesel ?? mx?.prices?.diesel_regular);
+  const currency=mx?.currencies?.diesel ?? mx?.currency ?? "MXN";
+  const unit=mx?.units?.diesel ?? mx?.unit ?? "liter";
+  if(!Number.isFinite(price)) throw new Error("Diésel MX inválido");
+  const unitLabel=String(unit).toLowerCase().includes("gallon")?"/gal":"/L";
+  return {
+    value:(currency==="MXN"?"$":"")+price.toFixed(2)+unitLabel,
+    raw:price,
+    meta:"México · OpenVan.camp",
+    direction:directionFromPrevious("diesel",price)
+  };
+}
+
+function deepStrings(obj,out=[]){
+  if(obj==null) return out;
+  if(typeof obj==="string"){ out.push(obj); return out; }
+  if(Array.isArray(obj)){ obj.forEach(x=>deepStrings(x,out)); return out; }
+  if(typeof obj==="object"){
+    Object.values(obj).forEach(x=>deepStrings(x,out));
+  }
+  return out;
+}
+
+async function fetchDirectIeps(){
+  // Direct SIDOF first. If the browser blocks CORS, use a public GET-only CORS relay.
+  let data;
+  try{
+    data=await fetchJson(MARKET_URLS.sidofSearch);
   }catch(e){
-    console.error("Morning Brief",e);
-    renderExecutiveBriefData(null);
-    $("briefConfigMsg").textContent="No pude cargar el Morning Brief. Revisa el endpoint.";
+    const proxied="https://proxy.cors.dev/"+MARKET_URLS.sidofSearch;
+    data=await fetchJson(proxied);
+  }
+
+  const text=deepStrings(data).join(" ");
+  // We only show a numeric value if SIDOF payload itself contains an explicit
+  // diesel/diésel context near a decimal amount. Otherwise, no value is invented.
+  const normalized=text.replace(/\s+/g," ");
+  const m=normalized.match(/(?:di[eé]sel|diesel)[^0-9]{0,120}([0-9]+\.[0-9]{2,4})/i)
+       || normalized.match(/([0-9]+\.[0-9]{2,4})[^a-záéíóúñ]{0,80}(?:di[eé]sel|diesel)/i);
+
+  if(!m) throw new Error("SIDOF sin cuota numérica identificable");
+
+  const value=Number(m[1]);
+  if(!Number.isFinite(value) || value<0 || value>20) throw new Error("Cuota IEPS fuera de rango");
+
+  return {
+    value:"$"+value.toFixed(4)+"/L",
+    raw:value,
+    meta:"SHCP · DOF/SIDOF",
+    direction:directionFromPrevious("ieps",value)
+  };
+}
+
+function renderDirectMarketResult(id,result){
+  const map={
+    diesel:["briefDiesel","briefDieselChange"],
+    fx:["briefFX","briefFXChange"],
+    brent:["briefBrent","briefBrentChange"],
+    ieps:["briefIEPS","briefIEPSChange"]
+  };
+  const ids=map[id];
+  if(!ids) return;
+  marketCardSet(ids[0],ids[1],result?.value,result?.meta,result?.direction);
+}
+
+function renderDirectMarketError(id){
+  const map={
+    diesel:["briefDiesel","briefDieselChange","OpenVan.camp"],
+    fx:["briefFX","briefFXChange","Croncopia"],
+    brent:["briefBrent","briefBrentChange","Croncopia"],
+    ieps:["briefIEPS","briefIEPSChange","DOF/SIDOF"]
+  };
+  const ids=map[id];
+  if(!ids) return;
+  marketCardSet(ids[0],ids[1],"Sin dato",ids[2],"flat");
+}
+
+async function loadMarketsBrief(){
+  if(isTrafficTime()) return;
+
+  const jobs={
+    diesel:fetchDirectDieselMX(),
+    fx:fetchDirectFx(),
+    brent:fetchDirectBrent(),
+    ieps:fetchDirectIeps()
+  };
+
+  const results=await Promise.allSettled(Object.values(jobs));
+  const keys=Object.keys(jobs);
+  const cacheValues={};
+
+  results.forEach((r,i)=>{
+    const key=keys[i];
+    if(r.status==="fulfilled"){
+      renderDirectMarketResult(key,r.value);
+      if(Number.isFinite(Number(r.value?.raw))) cacheValues[key]=Number(r.value.raw);
+    }else{
+      console.warn("Mercado directo",key,r.reason);
+      renderDirectMarketError(key);
+    }
+  });
+
+  if(Object.keys(cacheValues).length){
+    directMarketCacheWrite({updatedAt:new Date().toISOString(),values:cacheValues});
   }
 }
-function loadBriefEndpointSetting(){
-  const endpoint=briefEndpoint();
-  $("briefEndpointInput").value=endpoint;
-  $("briefConfigMsg").textContent=endpoint?"Fuente del Morning Brief configurada.":"Sin fuente conectada. No se mostrarán datos inventados.";
+
+async function loadAvailabilityBrief(){
+  if(isTrafficTime()) return;
+  const endpoint=availabilityEndpoint();
+  if(!endpoint){
+    renderAvailabilityData(null);
+    return;
+  }
+  try{
+    const d=await fetchJsonEndpoint(endpoint,"matepadbrief");
+    if(d?.ok!==true) throw new Error(d?.error||"Disponibilidad no disponible");
+    renderAvailabilityData(d);
+    $("availabilityConfigMsg").textContent="Disponibilidad PROD conectada.";
+  }catch(e){
+    console.error("Disponibilidad Morning Brief",e);
+    renderAvailabilityData(null);
+    $("availabilityConfigMsg").textContent="Disponibilidad no disponible. El resto del MatePad continúa funcionando.";
+  }
 }
-function saveBriefEndpoint(){
-  const v=$("briefEndpointInput").value.trim();
-  if(!v){localStorage.removeItem(BRIEF_ENDPOINT_KEY);$("briefConfigMsg").textContent="Fuente eliminada.";renderExecutiveBriefData(null);return;}
-  if(!/^https:\/\/script\.google\.com\/macros\/s\//i.test(v)){$("briefConfigMsg").textContent="La URL no parece ser un Web App de Google Apps Script.";return;}
-  localStorage.setItem(BRIEF_ENDPOINT_KEY,v);$("briefConfigMsg").textContent="Fuente guardada.";loadExecutiveBrief();
+
+async function loadExecutiveBrief(){
+  if(isTrafficTime()) return;
+  await Promise.allSettled([
+    loadMarketsBrief(),
+    loadAvailabilityBrief()
+  ]);
+}
+
+function loadBriefEndpointSettings(){
+  $("availabilityEndpointInput").value=availabilityEndpoint();
+  $("availabilityConfigMsg").textContent=availabilityEndpoint()
+    ? "Disponibilidad PROD configurada."
+    : "Falta conectar Mantenimiento PROD.";
+}
+
+function validAppsScriptUrl(v){
+  return /^https:\/\/script\.google\.com\/macros\/s\//i.test(v);
+}
+
+
+
+function saveAvailabilityEndpoint(){
+  const v=$("availabilityEndpointInput").value.trim();
+  if(!v){
+    localStorage.removeItem(AVAILABILITY_ENDPOINT_KEY);
+    $("availabilityConfigMsg").textContent="Fuente de Disponibilidad eliminada.";
+    renderAvailabilityData(null);
+    return;
+  }
+  if(!validAppsScriptUrl(v)){
+    $("availabilityConfigMsg").textContent="La URL no parece ser un Web App de Google Apps Script.";
+    return;
+  }
+  localStorage.setItem(AVAILABILITY_ENDPOINT_KEY,v);
+  $("availabilityConfigMsg").textContent="Fuente de Disponibilidad guardada.";
+  loadAvailabilityBrief();
 }
 
 function isTrafficTime(){
@@ -2003,7 +2305,7 @@ $("pendingMoreBtn").addEventListener("click",()=>{pendingExpanded=!pendingExpand
 $("visualShell").addEventListener("click",cycleVisualMode);
 $("trafficRefreshBtn").addEventListener("click",loadTraffic);
 $("trafficEndpointSaveBtn").addEventListener("click",saveTrafficEndpoint);
-$("briefEndpointSaveBtn").addEventListener("click",saveBriefEndpoint);
+$("availabilityEndpointSaveBtn").addEventListener("click",saveAvailabilityEndpoint);
 $("mapsOpenBtn").href=TRAFFIC_MAPS_URL;
 document.addEventListener("visibilitychange",()=>{
   if(!document.hidden && !$("playerPanel").classList.contains("hidden")) restartVisualizer();
@@ -2017,8 +2319,9 @@ document.addEventListener("visibilitychange",()=>{
   loadPending();
   pendingTimer=setInterval(loadPending,PENDING_REFRESH_MS);
 
-  loadBriefEndpointSetting();
+  loadBriefEndpointSettings();
   loadExecutiveBrief();
+  setInterval(()=>{ if(!isTrafficTime()) loadMarketsBrief(); },DIRECT_MARKET_REFRESH_MS);
 
   loadTrafficEndpointSetting();
   renderContextPanel();

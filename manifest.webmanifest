@@ -2,7 +2,7 @@
   "id": "./",
   "name": "MatePad Desk",
   "short_name": "MatePad Desk",
-  "description": "MatePad Desk con Morning Brief ejecutivo, Spotify mejorado, tráfico, clima y pendientes.",
+  "description": "MatePad Desk V21 con mercados directos de internet, disponibilidad PROD, tráfico, clima, pendientes y Spotify.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
