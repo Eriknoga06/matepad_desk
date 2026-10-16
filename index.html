@@ -232,6 +232,22 @@ main{max-width:1360px;padding:10px 14px}
   .compact-metrics{grid-template-columns:1fr 1fr}
 }
 
+
+/* V10 visualizer fix */
+.visual-shell{
+  min-height:290px;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(29,185,84,.07), transparent 45%),
+    #090b0f;
+}
+#musicVisual{min-height:290px}
+@media(max-width:980px){
+  .visual-shell,#musicVisual{min-height:250px}
+}
+@media(max-width:700px){
+  .visual-shell,#musicVisual{min-height:190px}
+}
+
 </style>
 </head>
 <body>
@@ -258,7 +274,7 @@ main{max-width:1360px;padding:10px 14px}
           <canvas id="musicVisual" width="640" height="420" aria-label="Visual generativo de Spotify"></canvas>
           <div class="visual-overlay">
             <span id="visualMode">Visual · Techno</span>
-            <span id="visualState">En espera</span>
+            <span id="visualState">Iniciando</span>
           </div>
         </div>
 
@@ -418,7 +434,7 @@ let refresh=localStorage.getItem(SPOTIFY_STORAGE_KEYS.refresh)||"";
 let expires=Number(localStorage.getItem(SPOTIFY_STORAGE_KEYS.expires)||0);
 let isPlaying=false, playerTimer=null;
 let currentTrackSeed=37,currentTrackProgress=0,currentTrackDuration=1,currentTrackId="";
-let visualModeIndex=1,visualRAF=0;
+let visualModeIndex=1,visualRAF=0,visualRunning=false;
 let weatherTimer=null;
 let weatherConfig=null;
 let pendingTimer=null;
@@ -547,17 +563,17 @@ function hashTrack(s){
   return (h>>>0);
 }
 
-function classifyVisual(title,artist){
-  const text=(String(title||"")+" "+String(artist||"")).toLowerCase();
+function classifyVisual(title,artist,genres=""){
+  const text=(String(title||"")+" "+String(artist||"")+" "+String(genres||"")).toLowerCase();
 
   const rules=[
     {idx:5, words:["drum and bass","drum & bass","dnb","jungle","breakbeat","liquid dnb","neurofunk"]},
-    {idx:1, words:["techno","hard techno","industrial","rave","acid techno","minimal techno"]},
-    {idx:4, words:["house","deep house","tech house","progressive house","afro house","dance","edm"]},
-    {idx:3, words:["synthwave","retrowave","outrun","cyberpunk","neon","80s","new wave"]},
+    {idx:1, words:["techno","hard techno","industrial techno","rave","acid techno","minimal techno"]},
+    {idx:4, words:["house","deep house","tech house","progressive house","afro house","dance","edm","electronica","electronic"]},
+    {idx:3, words:["synthwave","retrowave","outrun","cyberpunk","neon","new wave"]},
     {idx:6, words:["jazz","soul","funk","blues","r&b","neo soul","motown"]},
-    {idx:0, words:["lofi","lo-fi","study beats","chillhop","beats to relax","bedroom"]},
-    {idx:7, words:["acoustic","unplugged","folk","singer songwriter","chill","soft","piano","guitar"]},
+    {idx:0, words:["lofi","lo-fi","study beats","chillhop","beats to relax","bedroom pop"]},
+    {idx:7, words:["acoustic","unplugged","folk","singer songwriter","singer-songwriter","chill","soft rock","piano","guitar"]},
     {idx:2, words:["ambient","sleep","meditation","drone","soundscape","cinematic","atmospheric"]}
   ];
 
@@ -567,12 +583,12 @@ function classifyVisual(title,artist){
   return null;
 }
 
-function setTrackVisual(id,title,artist){
-  const key=[id,title,artist].filter(Boolean).join("|");
+function setTrackVisual(id,title,artist,genres=""){
+  const key=[id,title,artist,genres].filter(Boolean).join("|");
   if(key && key!==currentTrackId){
     currentTrackId=key;
-    currentTrackSeed=hashTrack(key);
-    const classified=classifyVisual(title,artist);
+    currentTrackSeed=hashTrack([id,title,artist].filter(Boolean).join("|"));
+    const classified=classifyVisual(title,artist,genres);
     visualModeIndex=classified===null ? currentTrackSeed%VISUAL_MODES.length : classified;
     $("visualMode").textContent="Visual · "+VISUAL_MODES[visualModeIndex];
   }
@@ -772,7 +788,41 @@ function drawMusicVisual(ts){
   x.fillRect(w*.08,h*.92,w*.84*progress,2*dpr);
 
   $("visualState").textContent=isPlaying?"En movimiento":"Pausado";
+  if(visualRunning) visualRAF=requestAnimationFrame(drawMusicVisual);
+}
+
+function startVisualizer(){
+  if(visualRunning) return;
+  visualRunning=true;
   visualRAF=requestAnimationFrame(drawMusicVisual);
+}
+
+function restartVisualizer(){
+  if(visualRAF) cancelAnimationFrame(visualRAF);
+  visualRAF=0;
+  visualRunning=false;
+  startVisualizer();
+}
+
+const artistGenreCache=new Map();
+
+async function refineVisualFromArtist(track,artistText){
+  try{
+    const artistId=track?.artists?.[0]?.id;
+    if(!artistId) return;
+
+    let genres=artistGenreCache.get(artistId);
+    if(genres===undefined){
+      const r=await api("/artists/"+encodeURIComponent(artistId));
+      if(!r.ok) return;
+      const a=await r.json();
+      genres=Array.isArray(a.genres)?a.genres.join(" "):"";
+      artistGenreCache.set(artistId,genres);
+    }
+    if(genres) setTrackVisual(track.id||track.uri||"",track.name||"",artistText,genres);
+  }catch(e){
+    console.debug("No fue posible refinar el visual por género",e);
+  }
 }
 
 async function loadPlayback(){
@@ -798,6 +848,7 @@ async function loadPlayback(){
     $("artist").textContent=artistText;
     $("cover").src=t.album?.images?.[0]?.url||"";
     setTrackVisual(t.id||t.uri||"",t.name||"",artistText);
+    refineVisualFromArtist(t,artistText);
     $("device").textContent=d.device?.name?"Reproduciendo en: "+d.device.name:"";
     const pct=t.duration_ms?Math.min(100,Math.max(0,(d.progress_ms/t.duration_ms)*100)):0;
     $("fill").style.width=pct+"%";
@@ -819,6 +870,7 @@ function showPlayer(){
   $("loginPanel").classList.add("hidden");
   $("playerPanel").classList.remove("hidden");
   $("authState").textContent="Spotify conectado";
+  startVisualizer();
   if(playerTimer) clearInterval(playerTimer);
   loadPlayback();
   playerTimer=setInterval(loadPlayback,5000);
@@ -1067,6 +1119,9 @@ $("weatherRefreshBtn").addEventListener("click",loadWeather);
 $("pendingRefreshBtn").addEventListener("click",loadPending);
 $("pendingMoreBtn").addEventListener("click",()=>{pendingExpanded=!pendingExpanded;renderPendingItems();});
 $("visualShell").addEventListener("click",cycleVisualMode);
+document.addEventListener("visibilitychange",()=>{
+  if(!document.hidden && !$("playerPanel").classList.contains("hidden")) restartVisualizer();
+});
 
 (async function init(){
   loadWeatherConfig();

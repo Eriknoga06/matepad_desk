@@ -2,7 +2,7 @@
   "id": "./",
   "name": "MatePad Desk",
   "short_name": "MatePad Desk",
-  "description": "Panel de escritorio compacto con Spotify persistente, 8 visuales, clima y pendientes.",
+  "description": "MatePad Desk con Spotify persistente, visuales animados, clima y pendientes.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
