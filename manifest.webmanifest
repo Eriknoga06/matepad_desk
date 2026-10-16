@@ -1,9 +1,32 @@
 {
-  "name": "MatePad Desk V5",
+  "id": "./",
+  "name": "MatePad Desk",
   "short_name": "MatePad Desk",
+  "description": "Panel de escritorio compacto con Spotify persistente, 8 visuales, clima y pendientes.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "landscape",
   "background_color": "#0e0f12",
   "theme_color": "#0e0f12",
-  "icons": []
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
 }

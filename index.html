@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0e0f12">
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>MatePad Desk</title>
 <style>
 :root{
@@ -149,13 +154,91 @@ button{padding:11px 13px}
   #clock{font-size:48px}
   .controls{justify-content:flex-start}
 }
+
+/* V7 · One-screen layout */
+main{max-width:1360px;padding:10px 14px}
+.compact-top{min-height:48px;align-items:center}
+.clock-inline{display:flex;align-items:baseline;gap:14px;min-width:0}
+#clock{font-size:34px!important;font-weight:760;line-height:1;letter-spacing:-.035em;white-space:nowrap}
+#ampm{font-size:13px;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-left:3px}
+#date{font-size:13px!important;margin-top:0!important;white-space:nowrap}
+.status{padding:7px 11px;font-size:12px}
+.grid{grid-template-columns:minmax(0,1.08fr) minmax(390px,.92fr);gap:10px;margin-top:8px}
+.card{padding:12px;border-radius:20px}
+.spotify-card{padding:12px}
+.spotify{display:grid;grid-template-columns:minmax(250px,.88fr) minmax(0,1.12fr);gap:14px;align-items:stretch}
+.visual-shell{position:relative;min-height:250px;border-radius:18px;overflow:hidden;background:#0b0d11;border:1px solid var(--line);cursor:pointer}
+#musicVisual{display:block;width:100%;height:100%;min-height:250px}
+.visual-overlay{position:absolute;left:10px;right:10px;bottom:9px;display:flex;justify-content:space-between;gap:10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.78);pointer-events:none}
+.spotify-info{display:flex;flex-direction:column;min-width:0;justify-content:center}
+.track-row{display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;align-items:center}
+.cover-thumb{width:48px!important;height:48px!important;aspect-ratio:1!important;border-radius:10px!important;object-fit:cover;background:var(--panel2)}
+.track-copy{min-width:0}
+.spotify-info h1{font-size:clamp(19px,2vw,28px);margin:3px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.artist{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.device{font-size:11px;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{height:6px;margin-top:12px}
+.times{font-size:10px;margin-top:4px}
+.compact-controls{margin-top:10px;gap:6px}
+.compact-controls button{padding:8px 10px;font-size:12px;border-radius:10px}
+.compact-side{gap:9px}
+.panel-block{padding:11px 12px;border-radius:16px}
+.panel-head{align-items:center}
+.mini-title{font-size:16px;margin-top:2px}
+.small-btn{padding:7px 9px;font-size:11px}
+.weather-main{margin-top:5px}
+.compact-weather .temp{font-size:38px}
+.compact-weather .condition{font-size:12px}
+.location{font-size:10px}
+.note{font-size:10.5px}
+.compact-metrics{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:8px}
+.compact-metrics .metric{padding:8px 9px;border-radius:11px}
+.compact-metrics .metric .eyebrow{font-size:9px}
+.compact-metrics .metric .v{font-size:14px}
+.pending-head{gap:8px}
+.pending-title,.mini-title{line-height:1.08}
+.pending-updated{font-size:9px}
+.compact-summary{gap:6px;margin-top:8px}
+.compact-summary .pending-kpi{padding:7px 8px;border-radius:10px}
+.compact-summary .pending-kpi .eyebrow{font-size:8.5px}
+.compact-summary .pending-kpi .n{font-size:18px}
+.compact-pending-list{gap:5px;margin-top:8px}
+.compact-pending-list .pending-item{padding:7px 9px;border-radius:11px}
+.compact-pending-list .pending-name{font-size:12px}
+.compact-pending-list .pending-meta{font-size:9.5px;gap:4px 6px;margin-top:4px}
+.badge{padding:3px 6px;font-size:9px}
+.compact-pending-list .pending-actions a{min-height:28px;padding:5px 8px;font-size:9.5px}
+.pending-more-wrap{margin-top:6px}
+.pending-more-btn{min-height:30px;padding:5px 10px;font-size:10px}
+.config-details{padding:0 11px 6px;border-radius:14px}
+.config-details summary{padding:9px 0;font-size:11px}
+.eyebrow{font-size:9.5px}
+.settings input{padding:8px 10px;font-size:14px}
+.settings button{padding:8px 10px;font-size:11px}
+
+@media(max-width:980px){
+  .grid{grid-template-columns:1fr}
+  .spotify{grid-template-columns:minmax(220px,.8fr) minmax(0,1.2fr)}
+  .compact-metrics{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:700px){
+  main{padding:10px}
+  .clock-inline{gap:9px}
+  #clock{font-size:29px!important}
+  #date{font-size:11px!important}
+  .grid{grid-template-columns:1fr}
+  .spotify{grid-template-columns:1fr}
+  .visual-shell,#musicVisual{min-height:180px}
+  .compact-metrics{grid-template-columns:1fr 1fr}
+}
+
 </style>
 </head>
 <body>
 <main>
-  <div class="top">
-    <div>
-      <div id="clock">--:--</div>
+  <div class="top compact-top">
+    <div class="clock-inline">
+      <div id="clock">--:-- <span id="ampm">--</span></div>
       <div id="date" class="muted">—</div>
     </div>
     <div id="authState" class="status">Spotify desconectado</div>
@@ -166,25 +249,37 @@ button{padding:11px 13px}
       <div id="loginPanel">
         <div class="eyebrow">Spotify</div>
         <h1>Conecta tu cuenta</h1>
-        <p class="note">Autenticación directa con Spotify mediante PKCE. No usa Client Secret.</p>
+        <p class="note">Autenticación directa con Spotify mediante PKCE. La sesión se conservará en este dispositivo hasta que pulses Desconectar.</p>
         <button id="loginBtn" class="primary">Conectar Spotify</button>
       </div>
 
       <div id="playerPanel" class="spotify hidden">
-        <img id="cover" alt="Portada del álbum">
-        <div>
-          <div class="eyebrow">Ahora suena</div>
-          <h1 id="track">Sin reproducción activa</h1>
-          <div id="artist" class="artist">—</div>
+        <div class="visual-shell" id="visualShell" title="Toca para cambiar el estilo visual">
+          <canvas id="musicVisual" width="640" height="420" aria-label="Visual generativo de Spotify"></canvas>
+          <div class="visual-overlay">
+            <span id="visualMode">Visual · Techno</span>
+            <span id="visualState">En espera</span>
+          </div>
+        </div>
+
+        <div class="spotify-info">
+          <div class="track-row">
+            <img id="cover" class="cover-thumb" alt="Portada del álbum">
+            <div class="track-copy">
+              <div class="eyebrow">Ahora suena</div>
+              <h1 id="track">Sin reproducción activa</h1>
+              <div id="artist" class="artist">—</div>
+            </div>
+          </div>
           <div id="device" class="device">—</div>
 
           <div class="bar"><div id="fill"></div></div>
           <div class="times"><span id="pos">0:00</span><span id="dur">0:00</span></div>
 
-          <div class="controls">
-            <button id="prevBtn">◀</button>
-            <button id="playBtn" class="primary">▶</button>
-            <button id="nextBtn">▶</button>
+          <div class="controls compact-controls">
+            <button id="prevBtn" aria-label="Anterior">◀</button>
+            <button id="playBtn" class="primary" aria-label="Reproducir o pausar">▶</button>
+            <button id="nextBtn" aria-label="Siguiente">▶</button>
             <button id="refreshBtn" class="secondary">Actualizar</button>
             <button id="logoutBtn" class="secondary">Desconectar</button>
           </div>
@@ -306,10 +401,24 @@ const PENDING_ENDPOINT="https://script.google.com/macros/s/AKfycbye1Kb1GRyUHtLZW
 const PENDING_REFRESH_MS=5*60*1000;
 const $=id=>document.getElementById(id);
 
-let token=sessionStorage.getItem("sp_access_token")||"";
-let refresh=sessionStorage.getItem("sp_refresh_token")||"";
-let expires=Number(sessionStorage.getItem("sp_expires_at")||0);
+const SPOTIFY_STORAGE_KEYS={
+  access:"sp_access_token",
+  refresh:"sp_refresh_token",
+  expires:"sp_expires_at"
+};
+
+// Migración transparente desde versiones anteriores que usaban sessionStorage.
+for(const key of Object.values(SPOTIFY_STORAGE_KEYS)){
+  const oldValue=sessionStorage.getItem(key);
+  if(oldValue && !localStorage.getItem(key)) localStorage.setItem(key,oldValue);
+}
+
+let token=localStorage.getItem(SPOTIFY_STORAGE_KEYS.access)||"";
+let refresh=localStorage.getItem(SPOTIFY_STORAGE_KEYS.refresh)||"";
+let expires=Number(localStorage.getItem(SPOTIFY_STORAGE_KEYS.expires)||0);
 let isPlaying=false, playerTimer=null;
+let currentTrackSeed=37,currentTrackProgress=0,currentTrackDuration=1,currentTrackId="";
+let visualModeIndex=1,visualRAF=0;
 let weatherTimer=null;
 let weatherConfig=null;
 let pendingTimer=null;
@@ -318,8 +427,13 @@ let pendingItemsCache=[];
 
 function updateClock(){
   const n=new Date();
-  $("clock").textContent=n.toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit",hour12:false});
-  $("date").textContent=n.toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  const parts=new Intl.DateTimeFormat("en-US",{hour:"numeric",minute:"2-digit",hour12:true}).formatToParts(n);
+  const hh=parts.find(p=>p.type==="hour")?.value||"";
+  const mm=parts.find(p=>p.type==="minute")?.value||"";
+  const dp=(parts.find(p=>p.type==="dayPeriod")?.value||"").toLowerCase();
+  $("clock").childNodes[0].nodeValue=hh+":"+mm+" ";
+  $("ampm").textContent=dp;
+  $("date").textContent=n.toLocaleDateString("es-MX",{weekday:"short",day:"numeric",month:"short"});
 }
 updateClock(); setInterval(updateClock,1000);
 
@@ -338,12 +452,18 @@ async function login(){
   location.href="https://accounts.spotify.com/authorize?"+q;
 }
 function saveTokens(d){
-  token=d.access_token;
+  if(d.access_token) token=d.access_token;
   if(d.refresh_token) refresh=d.refresh_token;
-  expires=Date.now()+(d.expires_in-60)*1000;
-  sessionStorage.setItem("sp_access_token",token);
-  sessionStorage.setItem("sp_refresh_token",refresh);
-  sessionStorage.setItem("sp_expires_at",String(expires));
+  expires=Date.now()+((Number(d.expires_in)||3600)-60)*1000;
+
+  if(token) localStorage.setItem(SPOTIFY_STORAGE_KEYS.access,token);
+  if(refresh) localStorage.setItem(SPOTIFY_STORAGE_KEYS.refresh,refresh);
+  localStorage.setItem(SPOTIFY_STORAGE_KEYS.expires,String(expires));
+
+  // Ya no necesitamos las copias temporales de versiones anteriores.
+  sessionStorage.removeItem(SPOTIFY_STORAGE_KEYS.access);
+  sessionStorage.removeItem(SPOTIFY_STORAGE_KEYS.refresh);
+  sessionStorage.removeItem(SPOTIFY_STORAGE_KEYS.expires);
 }
 async function exchange(code){
   const body=new URLSearchParams({
@@ -365,10 +485,37 @@ async function refreshToken(){
   const r=await fetch("https://accounts.spotify.com/api/token",{
     method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body
   });
-  if(!r.ok) return false;
+  if(!r.ok){
+    // 400/401 normalmente significa que Spotify invalidó el refresh token.
+    if(r.status===400 || r.status===401) clearSpotifySession();
+    return false;
+  }
   saveTokens(await r.json());
   return true;
 }
+function clearSpotifySession(){
+  token="";
+  refresh="";
+  expires=0;
+  localStorage.removeItem(SPOTIFY_STORAGE_KEYS.access);
+  localStorage.removeItem(SPOTIFY_STORAGE_KEYS.refresh);
+  localStorage.removeItem(SPOTIFY_STORAGE_KEYS.expires);
+}
+
+async function restoreSpotifySession(){
+  // Si hay un access token vigente, úsalo directamente.
+  if(token && Date.now()<expires) return true;
+
+  // Si existe refresh token, renueva silenciosamente.
+  if(refresh){
+    $("authState").textContent="Reconectando Spotify…";
+    return await refreshToken();
+  }
+
+  // Compatibilidad con una sesión antigua que sólo conserve access token.
+  return Boolean(token && Date.now()<expires);
+}
+
 async function api(path,opt={}){
   if(Date.now()>=expires && !(await refreshToken())) throw new Error("Sesión vencida");
   const headers=Object.assign({},opt.headers||{},{Authorization:"Bearer "+token});
@@ -382,6 +529,252 @@ function fmt(ms){
   const s=Math.floor((ms||0)/1000);
   return Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
 }
+
+const VISUAL_MODES=[
+  "Lofi",
+  "Techno",
+  "Ambient",
+  "Synthwave",
+  "House",
+  "Drum & Bass",
+  "Jazz / Soul",
+  "Chill / Acoustic"
+];
+
+function hashTrack(s){
+  let h=2166136261;
+  for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}
+  return (h>>>0);
+}
+
+function classifyVisual(title,artist){
+  const text=(String(title||"")+" "+String(artist||"")).toLowerCase();
+
+  const rules=[
+    {idx:5, words:["drum and bass","drum & bass","dnb","jungle","breakbeat","liquid dnb","neurofunk"]},
+    {idx:1, words:["techno","hard techno","industrial","rave","acid techno","minimal techno"]},
+    {idx:4, words:["house","deep house","tech house","progressive house","afro house","dance","edm"]},
+    {idx:3, words:["synthwave","retrowave","outrun","cyberpunk","neon","80s","new wave"]},
+    {idx:6, words:["jazz","soul","funk","blues","r&b","neo soul","motown"]},
+    {idx:0, words:["lofi","lo-fi","study beats","chillhop","beats to relax","bedroom"]},
+    {idx:7, words:["acoustic","unplugged","folk","singer songwriter","chill","soft","piano","guitar"]},
+    {idx:2, words:["ambient","sleep","meditation","drone","soundscape","cinematic","atmospheric"]}
+  ];
+
+  for(const rule of rules){
+    if(rule.words.some(w=>text.includes(w))) return rule.idx;
+  }
+  return null;
+}
+
+function setTrackVisual(id,title,artist){
+  const key=[id,title,artist].filter(Boolean).join("|");
+  if(key && key!==currentTrackId){
+    currentTrackId=key;
+    currentTrackSeed=hashTrack(key);
+    const classified=classifyVisual(title,artist);
+    visualModeIndex=classified===null ? currentTrackSeed%VISUAL_MODES.length : classified;
+    $("visualMode").textContent="Visual · "+VISUAL_MODES[visualModeIndex];
+  }
+}
+
+function cycleVisualMode(){
+  visualModeIndex=(visualModeIndex+1)%VISUAL_MODES.length;
+  $("visualMode").textContent="Visual · "+VISUAL_MODES[visualModeIndex];
+}
+
+function visualColor(seed,offset,alpha=1){
+  const hue=(seed%360+offset)%360;
+  return `hsla(${hue},72%,58%,${alpha})`;
+}
+function drawMusicVisual(ts){
+  const c=$("musicVisual");
+  if(!c) return;
+  const rect=c.getBoundingClientRect();
+  const dpr=Math.min(2,window.devicePixelRatio||1);
+  const w=Math.max(320,Math.floor(rect.width*dpr));
+  const h=Math.max(180,Math.floor(rect.height*dpr));
+  if(c.width!==w||c.height!==h){c.width=w;c.height=h}
+  const x=c.getContext("2d");
+  const t=(ts||0)/1000;
+  const active=isPlaying?1:.22;
+  const progress=Math.max(0,Math.min(1,currentTrackProgress/Math.max(1,currentTrackDuration)));
+
+  x.clearRect(0,0,w,h);
+  const bg=x.createLinearGradient(0,0,w,h);
+  bg.addColorStop(0,"#07090d");
+  bg.addColorStop(1,visualColor(currentTrackSeed,80,.16));
+  x.fillStyle=bg;
+  x.fillRect(0,0,w,h);
+
+  if(visualModeIndex===0){
+    // LOFI · slow organic blobs
+    for(let i=0;i<7;i++){
+      const p=((currentTrackSeed>>>((i%4)*5))%100)/100;
+      const cx=w*(.12+.76*((Math.sin(t*(.07+i*.011)*active+p*6.28)+1)/2));
+      const cy=h*(.16+.68*((Math.cos(t*(.06+i*.009)*active+i)+1)/2));
+      const r=Math.min(w,h)*(.10+.032*(i%3))*(.88+.12*Math.sin(t*.45+i));
+      const rg=x.createRadialGradient(cx,cy,0,cx,cy,r);
+      rg.addColorStop(0,visualColor(currentTrackSeed,i*38,.26));
+      rg.addColorStop(1,visualColor(currentTrackSeed,i*38,0));
+      x.fillStyle=rg;
+      x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.fill();
+    }
+    x.strokeStyle="rgba(255,255,255,.10)";
+    x.lineWidth=1*dpr;
+    for(let y=h*.28;y<h;y+=h*.19){
+      x.beginPath();x.moveTo(0,y);x.lineTo(w,y);x.stroke();
+    }
+
+  }else if(visualModeIndex===1){
+    // TECHNO · radial sequencer
+    const cx=w*.5,cy=h*.48,base=Math.min(w,h)*.145;
+    for(let i=0;i<52;i++){
+      const a=(i/52)*Math.PI*2;
+      const pulse=.32+.68*((Math.sin(t*(2.8+((currentTrackSeed+i)%7)*.14)*active+i*.68+progress*14)+1)/2);
+      const len=Math.min(w,h)*(.06+.19*pulse);
+      x.strokeStyle=visualColor(currentTrackSeed,i*4,.28+.56*pulse);
+      x.lineWidth=(1.6+2.6*pulse)*dpr;
+      x.beginPath();
+      x.moveTo(cx+Math.cos(a)*base,cy+Math.sin(a)*base);
+      x.lineTo(cx+Math.cos(a)*(base+len),cy+Math.sin(a)*(base+len));
+      x.stroke();
+    }
+    x.beginPath();x.arc(cx,cy,base*.76,0,Math.PI*2);
+    x.strokeStyle="rgba(255,255,255,.72)";
+    x.lineWidth=1.2*dpr;x.stroke();
+
+  }else if(visualModeIndex===2){
+    // AMBIENT · layered waves + glow
+    for(let band=0;band<6;band++){
+      x.beginPath();
+      const amp=h*(.025+band*.011);
+      const yy=h*(.23+band*.105);
+      for(let px=0;px<=w;px+=8*dpr){
+        const py=yy+Math.sin(px/(78*dpr)+t*(.22+band*.035)*active+band+progress*2)*amp;
+        if(px===0)x.moveTo(px,py); else x.lineTo(px,py);
+      }
+      x.strokeStyle=visualColor(currentTrackSeed,band*34,.13+band*.075);
+      x.lineWidth=(1.2+band*.36)*dpr;
+      x.stroke();
+    }
+    const rg=x.createRadialGradient(w*.68,h*.3,0,w*.68,h*.3,h*.48);
+    rg.addColorStop(0,visualColor(currentTrackSeed,180,.22));
+    rg.addColorStop(1,visualColor(currentTrackSeed,180,0));
+    x.fillStyle=rg;x.fillRect(0,0,w,h);
+
+  }else if(visualModeIndex===3){
+    // SYNTHWAVE · neon sun + perspective grid
+    const horizon=h*.58;
+    const sunR=Math.min(w,h)*.16;
+    const sunX=w*.5,sunY=h*.36;
+    const sg=x.createLinearGradient(0,sunY-sunR,0,sunY+sunR);
+    sg.addColorStop(0,visualColor(currentTrackSeed,25,.9));
+    sg.addColorStop(1,visualColor(currentTrackSeed,320,.65));
+    x.fillStyle=sg;x.beginPath();x.arc(sunX,sunY,sunR,0,Math.PI*2);x.fill();
+
+    x.save();
+    x.beginPath();x.rect(0,horizon,w,h-horizon);x.clip();
+    x.strokeStyle=visualColor(currentTrackSeed,290,.30);
+    x.lineWidth=1*dpr;
+    for(let i=-9;i<=9;i++){
+      x.beginPath();x.moveTo(w*.5,horizon);x.lineTo(w*.5+i*w*.11,h);x.stroke();
+    }
+    for(let j=0;j<12;j++){
+      const p=j/11;
+      const y=horizon+(h-horizon)*Math.pow(p,1.8);
+      x.beginPath();x.moveTo(0,y);x.lineTo(w,y);x.stroke();
+    }
+    x.restore();
+
+    x.fillStyle="rgba(7,9,13,.7)";
+    for(let s=0;s<5;s++) x.fillRect(sunX-sunR,sunY-sunR*.35+s*sunR*.2,sunR*2,2*dpr);
+
+  }else if(visualModeIndex===4){
+    // HOUSE · four-on-the-floor pulse tiles
+    const cols=6,rows=4,gap=8*dpr;
+    const cw=(w-gap*(cols+1))/cols;
+    const ch=(h-gap*(rows+1))/rows;
+    for(let r=0;r<rows;r++){
+      for(let col=0;col<cols;col++){
+        const i=r*cols+col;
+        const beat=(Math.sin(t*(2.0+((i%4)*.05))*Math.PI*2*active+i*.85)+1)/2;
+        const alpha=.08+.34*beat;
+        x.fillStyle=visualColor(currentTrackSeed,i*9,alpha);
+        const scale=.78+.18*beat;
+        const ww=cw*scale,hh=ch*scale;
+        const xx=gap+col*(cw+gap)+(cw-ww)/2;
+        const yy=gap+r*(ch+gap)+(ch-hh)/2;
+        x.beginPath();
+        x.roundRect(xx,yy,ww,hh,10*dpr);
+        x.fill();
+      }
+    }
+
+  }else if(visualModeIndex===5){
+    // DRUM & BASS · fast spectrum bars
+    const bars=46;
+    const bw=w/bars;
+    for(let i=0;i<bars;i++){
+      const speed=5.2+((i+currentTrackSeed)%8)*.16;
+      const v=.12+.88*((Math.sin(t*speed*active+i*.72+progress*18)+1)/2);
+      const bh=h*(.12+.72*Math.pow(v,1.65));
+      x.fillStyle=visualColor(currentTrackSeed,i*6,.22+.60*v);
+      x.fillRect(i*bw+1*dpr,h-bh,bw-2*dpr,bh);
+    }
+    x.strokeStyle="rgba(255,255,255,.18)";
+    x.lineWidth=1*dpr;
+    x.beginPath();x.moveTo(0,h*.50);x.lineTo(w,h*.50);x.stroke();
+
+  }else if(visualModeIndex===6){
+    // JAZZ / SOUL · floating brass-like particles and arcs
+    for(let i=0;i<24;i++){
+      const p=((currentTrackSeed+i*97)%997)/997;
+      const drift=t*(.06+(i%5)*.009)*active;
+      const px=w*((p+drift)%1);
+      const py=h*(.15+.72*((Math.sin(i*1.73+t*.22*active)+1)/2));
+      const rr=(3+(i%4)*2)*dpr;
+      x.fillStyle=visualColor(currentTrackSeed,28+i*8,.18+.045*(i%4));
+      x.beginPath();x.arc(px,py,rr,0,Math.PI*2);x.fill();
+    }
+    const cx=w*.46,cy=h*.52;
+    for(let k=0;k<5;k++){
+      x.beginPath();
+      x.arc(cx,cy,Math.min(w,h)*(.12+k*.055),Math.PI*.18,Math.PI*1.28);
+      x.strokeStyle=visualColor(currentTrackSeed,25+k*22,.18+k*.08);
+      x.lineWidth=(2+k*.7)*dpr;x.stroke();
+    }
+
+  }else{
+    // CHILL / ACOUSTIC · strings + gentle light
+    const rg=x.createRadialGradient(w*.30,h*.32,0,w*.30,h*.32,h*.55);
+    rg.addColorStop(0,visualColor(currentTrackSeed,35,.20));
+    rg.addColorStop(1,visualColor(currentTrackSeed,35,0));
+    x.fillStyle=rg;x.fillRect(0,0,w,h);
+
+    for(let i=0;i<8;i++){
+      const y=h*(.18+i*.085);
+      const amp=h*(.009+i*.0015);
+      x.beginPath();
+      for(let px=0;px<=w;px+=7*dpr){
+        const py=y+Math.sin(px/(85*dpr)+t*(.18+i*.012)*active+i*.5)*amp;
+        if(px===0)x.moveTo(px,py); else x.lineTo(px,py);
+      }
+      x.strokeStyle=visualColor(currentTrackSeed,15+i*16,.13+i*.035);
+      x.lineWidth=(1.1+i*.12)*dpr;x.stroke();
+    }
+  }
+
+  // progress line shared by all modes
+  x.fillStyle="rgba(255,255,255,.12)";
+  x.fillRect(w*.08,h*.92,w*.84,2*dpr);
+  x.fillStyle="rgba(255,255,255,.72)";
+  x.fillRect(w*.08,h*.92,w*.84*progress,2*dpr);
+
+  $("visualState").textContent=isPlaying?"En movimiento":"Pausado";
+  visualRAF=requestAnimationFrame(drawMusicVisual);
+}
+
 async function loadPlayback(){
   try{
     const r=await api("/me/player");
@@ -391,6 +784,8 @@ async function loadPlayback(){
       $("device").textContent="Abre Spotify en alguno de tus dispositivos";
       $("fill").style.width="0%";
       $("pos").textContent="0:00"; $("dur").textContent="0:00";
+      isPlaying=false; currentTrackProgress=0; currentTrackDuration=1;
+      $("visualState").textContent="En espera";
       return;
     }
     if(!r.ok) throw new Error("Spotify "+r.status);
@@ -398,12 +793,16 @@ async function loadPlayback(){
     isPlaying=!!d.is_playing;
     const t=d.item;
     if(!t) return;
+    const artistText=(t.artists||[]).map(a=>a.name).join(", ");
     $("track").textContent=t.name||"Sin título";
-    $("artist").textContent=(t.artists||[]).map(a=>a.name).join(", ");
+    $("artist").textContent=artistText;
     $("cover").src=t.album?.images?.[0]?.url||"";
+    setTrackVisual(t.id||t.uri||"",t.name||"",artistText);
     $("device").textContent=d.device?.name?"Reproduciendo en: "+d.device.name:"";
     const pct=t.duration_ms?Math.min(100,Math.max(0,(d.progress_ms/t.duration_ms)*100)):0;
     $("fill").style.width=pct+"%";
+    currentTrackProgress=d.progress_ms||0;
+    currentTrackDuration=t.duration_ms||1;
     $("pos").textContent=fmt(d.progress_ms); $("dur").textContent=fmt(t.duration_ms);
     $("playBtn").textContent=isPlaying?"⏸":"▶";
   }catch(e){
@@ -425,8 +824,8 @@ function showPlayer(){
   playerTimer=setInterval(loadPlayback,5000);
 }
 function logout(){
-  sessionStorage.clear();
-  token=refresh="";
+  clearSpotifySession();
+  sessionStorage.removeItem("sp_verifier");
   if(playerTimer) clearInterval(playerTimer);
   $("playerPanel").classList.add("hidden");
   $("loginPanel").classList.remove("hidden");
@@ -667,6 +1066,7 @@ $("geoBtn").addEventListener("click",useGeolocation);
 $("weatherRefreshBtn").addEventListener("click",loadWeather);
 $("pendingRefreshBtn").addEventListener("click",loadPending);
 $("pendingMoreBtn").addEventListener("click",()=>{pendingExpanded=!pendingExpanded;renderPendingItems();});
+$("visualShell").addEventListener("click",cycleVisualMode);
 
 (async function init(){
   loadWeatherConfig();
@@ -676,12 +1076,29 @@ $("pendingMoreBtn").addEventListener("click",()=>{pendingExpanded=!pendingExpand
   loadPending();
   pendingTimer=setInterval(loadPending,PENDING_REFRESH_MS);
 
-  const code=new URLSearchParams(location.search).get("code");
+  const params=new URLSearchParams(location.search);
+  const code=params.get("code");
+  const spotifyError=params.get("error");
+
   if(code){
-    try{await exchange(code);showPlayer();}
-    catch(e){$("authState").textContent="Error al conectar";}
-  }else if(token&&refresh){
-    showPlayer();
+    try{
+      await exchange(code);
+      showPlayer();
+    }catch(e){
+      console.error("Spotify callback",e);
+      $("authState").textContent="Error al conectar";
+    }
+  }else if(spotifyError){
+    $("authState").textContent="Conexión cancelada";
+    history.replaceState({},"",REDIRECT_URI);
+  }else{
+    try{
+      const restored=await restoreSpotifySession();
+      if(restored) showPlayer();
+    }catch(e){
+      console.error("Spotify restore",e);
+      $("authState").textContent="Spotify desconectado";
+    }
   }
 })();
 
